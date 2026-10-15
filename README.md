@@ -1,6 +1,16 @@
 # Desktop System & Weather Widget
 
-Widget trasparente per il desktop di GNOME (Zorin OS, Ubuntu, Debian, Fedora…) che mostra:
+**Cosa fa.** È un'estensione di GNOME Shell che disegna sullo sfondo del desktop una scheda
+trasparente, sempre sotto le finestre, con tre cose in un colpo d'occhio: lo stato del computer
+(CPU, memoria, disco, rete, GPU, ventole, batteria), il meteo del posto in cui ti trovi (condizioni,
+prossime ore, previsioni, allerte ufficiali, pioggia imminente, sole, luna, aria, UV, pollini) e un
+pannello di rete e sicurezza (IP pubblico e VPN, Wi-Fi, porte aperte, firewall, aggiornamenti,
+accessi falliti, vulnerabilità CISA KEV e notizie CERT-AGID). Non servono chiavi API, programmi
+aggiuntivi né privilegi di amministratore: i dati di sistema li legge da `/proc`, `/sys` e D-Bus.
+Interfaccia in italiano e inglese. Compatibile con **GNOME Shell 45–50** su Zorin OS 18, Ubuntu
+24.04+, Debian 13+, Fedora 39+ e altre (vedi [Compatibilità](#compatibilità)).
+
+In dettaglio, mostra:
 
 - **Sistema**: utilizzo CPU con grafico storico, temperatura CPU, carico, temperatura e frequenza
   della GPU e memoria video usata (AMD, NVIDIA, Intel e altri driver DRM, senza privilegi),
@@ -103,9 +113,26 @@ gnome-extensions prefs desktop-sysweather@piorio.github.io
 
 ## Compatibilità
 
-- **GNOME Shell 45 e successivi**, sia Wayland sia X11: Zorin OS 18 (Core/Pro), Ubuntu 24.04+,
-  Debian 13+, Fedora 39+, ecc. Testato su Zorin OS 18.1 / GNOME 46.
-- Non funziona su desktop diversi da GNOME (KDE, XFCE/Zorin Lite, Cinnamon, MATE).
+Richiede **GNOME Shell da 45 a 50** (sessione Wayland o X11). Le distribuzioni Linux che lo
+forniscono:
+
+| Distribuzione | Versioni | GNOME Shell | Stato |
+|---|---|---|---|
+| Zorin OS | 18 Core / Pro | 46 | **Testato** (Zorin OS 18.1) |
+| Ubuntu | 24.04 LTS, 24.10, 25.04, 25.10, 26.04 LTS | 46–50 | Dovrebbe funzionare (stessa base di Zorin 18) |
+| Debian | 13 "trixie" e successive | 48+ | Dovrebbe funzionare |
+| Fedora Workstation | 39 e successive | 45+ | Dovrebbe funzionare; aggiornamenti via `dnf` non verificati su una macchina reale |
+| openSUSE Tumbleweed / Leap 16 | correnti | 45+ | Dovrebbe funzionare; aggiornamenti via `zypper` non verificati |
+| Arch Linux, Manjaro GNOME, EndeavourOS | rolling | 45+ | Dovrebbe funzionare (aggiornamenti via `checkupdates` di pacman-contrib) |
+| Pop!_OS, Linux Mint | tutte | — | **No**: usano COSMIC/Cinnamon, non GNOME Shell |
+
+- Il pacchetto `.deb` è per Zorin OS, Ubuntu, Debian e derivate; sulle altre distribuzioni si usa lo
+  `.zip` con `install.sh` o `gnome-extensions install`.
+- Non funziona su desktop diversi da GNOME (KDE Plasma, XFCE/Zorin Lite, Cinnamon, MATE,
+  COSMIC) né su GNOME Shell 44 e precedenti.
+- Le allerte meteo coprono Italia, Francia, Spagna, Germania, Austria, Svizzera, Regno Unito,
+  Portogallo, Grecia, Paesi Bassi, Belgio, Croazia, Slovenia, Malta, Irlanda, Polonia e Cechia
+  (feed MeteoAlarm); i terremoti usano INGV in Italia e USGS altrove.
 
 Il widget è disegnato nel livello dello sfondo di GNOME Shell: resta sotto tutte le finestre
 e non compare in Alt+Tab. Legge i dati direttamente da `/proc`, `/sys` e D-Bus, quindi non servono
