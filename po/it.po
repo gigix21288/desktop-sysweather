@@ -896,8 +896,8 @@ msgstr "In alto a destra"
 msgid "Two columns: weather on the left, system on the right"
 msgstr "Due colonne: meteo a sinistra, sistema a destra"
 
-msgid "UTC clock and Unix time"
-msgstr "Orologio UTC e tempo Unix"
+msgid "Clock and Unix time"
+msgstr "Orologio e tempo Unix"
 
 msgid "UV %d · extreme"
 msgstr "UV %d · estremo"
@@ -1222,3 +1222,21 @@ msgid "to %d host"
 msgid_plural "to %d hosts"
 msgstr[0] "verso %d host"
 msgstr[1] "verso %d host"
+
+msgid "Clock"
+msgstr "Orologio"
+
+msgid "System time"
+msgstr "Ora di sistema"
+
+msgid "Time at the weather location"
+msgstr "Ora della località meteo"
+
+msgid "UTC"
+msgstr "UTC"
+
+msgid "System time and UTC"
+msgstr "Ora di sistema e UTC"
+
+msgid "The Unix time always follows"
+msgstr "Il tempo Unix segue sempre"

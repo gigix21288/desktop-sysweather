@@ -73,8 +73,9 @@ locale senza privilegi (NetworkManager via D-Bus, `/proc`, `/sys`, systemd e log
 - **Notifiche desktop** quando la VPN cade, quando cinque o più accessi falliscono tra due
   controlli, per le allerte meteo arancioni e rosse e quando CISA aggiunge al catalogo KEV una
   vulnerabilità usata da ransomware (le CVE già viste non vengono ripetute al login)
-- **Orologio UTC e tempo Unix** sotto il nome del computer; tutti gli altri orari seguono il
-  formato 12 o 24 ore scelto nelle impostazioni di GNOME
+- **Orologio e tempo Unix** sotto il nome del computer: ora di sistema con i secondi (oppure, a
+  scelta, ora della località meteo, UTC, o sistema e UTC insieme) e tempo Unix; tutti gli orari
+  seguono il formato 12 o 24 ore scelto nelle impostazioni di GNOME
 - **Temi Terminal**: oltre a scuro e chiaro, due temi a fosfori (verde e ambra) con font
   monospace, grafici a blocchi e scanline
 - **Due colonne**: meteo e feed a sinistra, sistema, rete e sicurezza a destra (predefinito),
@@ -100,6 +101,7 @@ locale senza privilegi (NetworkManager via D-Bus, `/proc`, `/sys`, systemd e log
 | Posizione meteo | Automatica (servizi di localizzazione di sistema, altrimenti IP) oppure città cercata per nome |
 | Unità | Metriche (°C, km/h) o imperiali (°F, mph) |
 | Terremoti | Magnitudo minima e raggio di ricerca in km |
+| Orologio | Ora di sistema / località meteo / UTC / sistema e UTC, sempre con il tempo Unix |
 | Sezioni | Ogni blocco si può nascondere: allerte meteo, prossime ore, pioggia, sole e luna, aria, meteo spaziale, consiglio, previsioni, terremoti, sistema, processi, rete, porte, latenza, sicurezza, feed… |
 | Rete | Host per la latenza, intervalli di aggiornamento, maschera dell'IP pubblico |
 | Sicurezza | Dettagli al passaggio del mouse (attivabile/disattivabile), intervallo di controllo |
@@ -156,7 +158,7 @@ costruiscono dai sorgenti con `./build.py` (vedi [Sviluppo](#sviluppo)).
 ### Pacchetto .deb (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.0_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.1_all.deb
 ```
 
 Poi **esci e rientra** nella sessione e attiva il widget dall'app *Estensioni*, oppure con

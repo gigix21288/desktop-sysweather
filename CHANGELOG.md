@@ -2,6 +2,15 @@
 
 Tutte le modifiche rilevanti del widget. Le date sono quelle di build dei pacchetti.
 
+## 1.6.1 — 2026-10-15
+
+- **Orologio nell'intestazione**: ora mostra l'**ora di sistema** (con i secondi, nel formato 12 o
+  24 ore di GNOME) seguita dal tempo Unix, invece dell'ora UTC. Nella pagina Contenuto delle
+  preferenze la nuova riga *Orologio* permette di scegliere l'ora di sistema, l'ora della località
+  meteo (utile con una città in un altro fuso orario), l'ora UTC come prima, oppure ora di sistema
+  e UTC insieme.
+- Screenshot della documentazione rifatti a 1920x1080.
+
 ## 1.6.0 — 2026-10-14
 
 - **Scelta della lingua** nelle preferenze (pagina Aspetto): *Lingua di sistema*, *English* o

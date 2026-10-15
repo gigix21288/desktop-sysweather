@@ -162,6 +162,33 @@ export function clockLabel(unix, timezone, options = {}) {
     return hourMinuteLabel(hour % 24, minute, options);
 }
 
+const secondFormats = new Map();
+
+/**
+ * Formats an instant as "15:05:09" (or "3:05:09 PM") in a time zone.
+ *
+ * @param {number} unix seconds
+ * @param {string} [timezone] IANA zone; empty or unknown means the system zone
+ * @returns {string}
+ */
+export function clockTimeLabel(unix, timezone) {
+    const key = timezone ?? '';
+    let format = secondFormats.get(key);
+    if (!format) {
+        const spec = {hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'};
+        try {
+            format = new Intl.DateTimeFormat('en-GB', {...spec, timeZone: timezone || undefined});
+        } catch {
+            format = new Intl.DateTimeFormat('en-GB', spec);
+        }
+        secondFormats.set(key, format);
+    }
+    const [hour, minute, second] = format.format(new Date(unix * 1000)).split(':').map(Number);
+    const label = hourMinuteLabel(hour % 24, minute);
+    // "15:05" -> "15:05:09", "3:05 PM" -> "3:05:09 PM"
+    return label.replace(/^(\d{1,2}:\d{2})/, `$1:${pad2(second)}`);
+}
+
 /**
  * @param {number} seconds a duration
  * @returns {string} e.g. "3 h 20 min"

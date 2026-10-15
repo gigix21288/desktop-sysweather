@@ -11,7 +11,7 @@ import {KEV_CATALOGUE_URL} from './feeds.js';
 import {portLabel} from './network.js';
 import {weatherInfo} from './weather.js';
 import {
-    airInfo, clockLabel, dailyAdvice, dateLabel, formatDuration, hourMinuteLabel, issInfo, kpInfo, localToUnix,
+    airInfo, clockLabel, clockTimeLabel, dailyAdvice, dateLabel, formatDuration, hourMinuteLabel, issInfo, kpInfo, localToUnix,
     mix, moonPhase, nextMoonLabel, rainNowcast, skyColors, sunState, timeAgo, uvInfo, warningInfo, weekdayLabel,
 } from './sky.js';
 
@@ -786,8 +786,17 @@ class SysWeatherDesktopWidget extends St.Widget {
     }
 
     _updateClock() {
-        const now = GLib.DateTime.new_now_utc();
-        this._clock.text = `UTC ${now.format('%H:%M:%S')} · ${now.to_unix()}`;
+        const unix = Math.floor(Date.now() / 1000);
+        const mode = this._sections?.clockMode ?? 'local';
+        const parts = [];
+        if (mode === 'location')
+            parts.push(clockTimeLabel(unix, this._weatherData?.timezone));
+        else if (mode !== 'utc')
+            parts.push(clockTimeLabel(unix));
+        if (mode === 'utc' || mode === 'local-utc')
+            parts.push(`UTC ${clockTimeLabel(unix, 'UTC')}`);
+        parts.push(String(unix));
+        this._clock.text = parts.join(' · ');
     }
 
     _buildWeather() {
@@ -1182,10 +1191,12 @@ class SysWeatherDesktopWidget extends St.Widget {
         this._sections = sections;
         this._header.visible = sections.header;
         this._clock.visible = sections.header && sections.clock === true;
-        if (this._clock.visible)
+        if (this._clock.visible) {
+            this._updateClock();
             this._startClock();
-        else
+        } else {
             this._stopClock();
+        }
         this._weather.visible = sections.weather;
         this._system.visible = sections.system;
         this._details.visible = sections.details;

@@ -74,8 +74,9 @@ without privileges (NetworkManager over D-Bus, `/proc`, `/sys`, systemd and logi
 - **Desktop notifications** when the VPN drops, when five or more logins fail between two
   checks, for orange and red weather warnings and when CISA adds a ransomware-related
   vulnerability to the KEV catalogue (CVEs already seen are not repeated at login)
-- **UTC clock and Unix time** below the computer name; every other time follows the 12 or
-  24-hour format chosen in the GNOME settings
+- **Clock and Unix time** below the computer name: system time with seconds (or, by choice,
+  the time at the weather location, UTC, or system time and UTC together) and Unix time; every
+  time follows the 12 or 24-hour format chosen in the GNOME settings
 - **Terminal themes**: besides dark and light, two phosphor themes (green and amber) with a
   monospace font, block graphs and scanlines
 - **Two columns**: weather and feeds on the left, system, network and security on the right
@@ -101,6 +102,7 @@ without privileges (NetworkManager over D-Bus, `/proc`, `/sys`, systemd and logi
 | Weather location | Automatic (system location services, otherwise IP) or a city searched by name |
 | Units | Metric (°C, km/h) or imperial (°F, mph) |
 | Earthquakes | Minimum magnitude and search radius in km |
+| Clock | System time / weather location / UTC / system and UTC, always with the Unix time |
 | Sections | Every block can be hidden: weather warnings, next hours, rain, sun and moon, air, space weather, tip, forecast, earthquakes, system, processes, network, ports, latency, security, feeds… |
 | Network | Latency host, refresh intervals, public IP mask |
 | Security | Details on hover (on/off), check interval |
@@ -155,7 +157,7 @@ them from source with `./build.py` (see [Development](#development)).
 ### .deb package (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.0_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.1_all.deb
 ```
 
 Then **log out and back in** and enable the widget from the *Extensions* app, or with

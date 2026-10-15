@@ -116,7 +116,17 @@
     </key>
     <key name="show-clock" type="b">
       <default>true</default>
-      <summary>Show the UTC clock and the Unix time in the header</summary>
+      <summary>Show the clock and the Unix time in the header</summary>
+    </key>
+    <key name="clock-mode" type="s">
+      <choices>
+        <choice value="local"/>
+        <choice value="location"/>
+        <choice value="utc"/>
+        <choice value="local-utc"/>
+      </choices>
+      <default>'local'</default>
+      <summary>Which time the header clock shows: system time, time at the weather location, UTC, or system time and UTC</summary>
     </key>
     <key name="show-processes" type="b">
       <default>true</default>

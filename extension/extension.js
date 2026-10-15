@@ -41,7 +41,7 @@ const PUBLIC_IP_DEBOUNCE_SECONDS = 6;
 const APPEARANCE_KEYS = ['theme', 'background-opacity', 'scale', 'sky-background', 'columns'];
 const SECTION_KEYS = [
     'show-header', 'show-weather', 'show-forecast', 'show-hourly', 'show-system', 'show-details',
-    'show-rain', 'show-sun', 'show-air', 'show-advice', 'show-quakes', 'show-clock',
+    'show-rain', 'show-sun', 'show-air', 'show-advice', 'show-quakes', 'show-clock', 'clock-mode',
     'show-processes', 'show-network', 'show-ports', 'show-latency', 'show-security',
     'show-feeds', 'show-cert-agid', 'show-space', 'show-alerts',
 ];
@@ -579,6 +579,7 @@ export default class DesktopSysWeatherExtension extends Extension {
             system: s.get_boolean('show-system'),
             details: s.get_boolean('show-details'),
             clock: s.get_boolean('show-clock'),
+            clockMode: s.get_string('clock-mode'),
             processes: s.get_boolean('show-processes'),
             network: s.get_boolean('show-network'),
             ports: s.get_boolean('show-ports'),

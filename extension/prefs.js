@@ -409,8 +409,14 @@ export default class DesktopSysWeatherPreferences extends ExtensionPreferences {
 
         const sections = new Adw.PreferencesGroup({title: _('Sections')});
         sections.add(switchRow(settings, 'show-header', _('Computer name and uptime')));
-        sections.add(switchRow(settings, 'show-clock', _('UTC clock and Unix time'),
+        sections.add(switchRow(settings, 'show-clock', _('Clock and Unix time'),
             _('Shown under the computer name')));
+        sections.add(comboRow(settings, 'clock-mode', _('Clock'), [
+            ['local', _('System time')],
+            ['location', _('Time at the weather location')],
+            ['utc', _('UTC')],
+            ['local-utc', _('System time and UTC')],
+        ], _('The Unix time always follows')));
         sections.add(switchRow(settings, 'show-weather', _('Current weather')));
         sections.add(switchRow(settings, 'show-alerts', _('Weather warnings'),
             _('Alerts of the national weather service for your region, relayed by MeteoAlarm (Europe)')));
