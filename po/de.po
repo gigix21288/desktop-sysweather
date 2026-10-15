@@ -382,7 +382,7 @@ msgid "Hover a chip for the details."
 msgstr "Für Details den Zeiger auf einen Chip bewegen."
 
 msgid "Humidity %s"
-msgstr "Luftfeuchte %s"
+msgstr "Feuchte %s"
 
 msgid "IP location"
 msgstr "IP-Standort"
