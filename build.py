@@ -55,6 +55,10 @@ def build_zip(staged):
                 zf.write(path, path.relative_to(staged))
     shutil.copy(ROOT / 'install.sh', DIST / 'install.sh')
     print(f'built {out.relative_to(ROOT)}')
+    # the same zip under a versioned name, ready to upload to extensions.gnome.org
+    ego = DIST / f'desktop-sysweather-{VERSION}-ego.zip'
+    shutil.copy(out, ego)
+    print(f'built {ego.relative_to(ROOT)}')
 
 
 def build_deb(staged):

@@ -232,7 +232,7 @@ extension/            extension sources (ESM, GNOME 45+)
   lib/feeds.js        CISA KEV, CERT-AGID, NOAA, ISS, MeteoAlarm, public IP
   stylesheet.css      dark and light themes
 po/                   translations (it, es, fr, de)
-build.py              builds dist/*.zip and dist/*.deb
+build.py              builds dist/*.zip, dist/*.deb and dist/*-ego.zip (the upload for extensions.gnome.org)
 install.sh            per-user installation from the .zip
 tools/                msgfmt.py (fallback .po compiler), nested-shell.sh (testing)
 tests/                unit tests of the pure modules (gjs), run by tests/run.sh and by the CI

@@ -236,7 +236,7 @@ extension/            sorgenti dell'estensione (ESM, GNOME 45+)
   lib/feeds.js        CISA KEV, CERT-AGID, NOAA, ISS, MeteoAlarm, IP pubblico
   stylesheet.css      temi scuro e chiaro
 po/                   traduzioni (it, es, fr, de)
-build.py              crea dist/*.zip e dist/*.deb
+build.py              crea dist/*.zip, dist/*.deb e dist/*-ego.zip (da caricare su extensions.gnome.org)
 install.sh            installazione per l'utente corrente dal .zip
 tools/                msgfmt.py (compilatore .po di riserva), nested-shell.sh (test)
 tests/                test unitari dei moduli puri (gjs), eseguiti da tests/run.sh e dalla CI
