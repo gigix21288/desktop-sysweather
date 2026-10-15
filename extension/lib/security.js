@@ -8,10 +8,11 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import {fileTime, listDir, readBytes, readFile} from './files.js';
+
 Gio._promisify(Gio.DBusConnection.prototype, 'call');
 Gio._promisify(Gio.Subprocess.prototype, 'communicate_utf8_async');
 
-const decoder = new TextDecoder();
 const MINUTE = 60 * 1e6;
 
 const APT_CHECK = '/usr/lib/update-notifier/apt-check';
@@ -30,33 +31,6 @@ const SELINUX_ENFORCE = '/sys/fs/selinux/enforce';
 const SYSTEMD = 'org.freedesktop.systemd1';
 const SYSTEMD_PATH = '/org/freedesktop/systemd1';
 const LOGIN1 = 'org.freedesktop.login1';
-
-function readSync(path) {
-    try {
-        const [ok, bytes] = GLib.file_get_contents(path);
-        return ok ? decoder.decode(bytes) : null;
-    } catch {
-        return null;
-    }
-}
-
-function readBytes(path) {
-    try {
-        const [ok, bytes] = GLib.file_get_contents(path);
-        return ok ? bytes : null;
-    } catch {
-        return null;
-    }
-}
-
-function fileTime(path) {
-    try {
-        const info = Gio.File.new_for_path(path).query_info('time::modified', Gio.FileQueryInfoFlags.NONE, null);
-        return info.get_attribute_uint64('time::modified') || null;
-    } catch {
-        return null;
-    }
-}
 
 /**
  * Compares two dotted/dashed version strings numerically ("7.0.0-38" > "6.17.0-20").
@@ -139,27 +113,6 @@ export function parseZypperTable(text, kind) {
         }
     }
     return rows;
-}
-
-function listDir(path) {
-    const names = [];
-    let enumerator = null;
-    try {
-        enumerator = Gio.File.new_for_path(path).enumerate_children(
-            'standard::name', Gio.FileQueryInfoFlags.NONE, null);
-        let info;
-        while ((info = enumerator.next_file(null)))
-            names.push(info.get_name());
-    } catch {
-        // missing directory
-    } finally {
-        try {
-            enumerator?.close(null);
-        } catch {
-            // already closed
-        }
-    }
-    return names;
 }
 
 const RUN_TIMEOUT_SECONDS = 20;
@@ -292,11 +245,18 @@ export class SecurityMonitor {
                     ['ssh.service', 'sshd.service', 'ssh.socket', 'sshd.socket'], cancellable)),
                 quiet(this._containers.get(cancellable)),
             ]);
-        this._static ??= {
-            secureBoot: this._secureBoot(),
-            encrypted: this._rootEncrypted(),
-            mac: this._mandatoryAccess(),
-        };
+        if (!this._static) {
+            const [secureBoot, encrypted, mac] = await Promise.all([
+                this._secureBoot(cancellable),
+                this._rootEncrypted(cancellable),
+                this._mandatoryAccess(cancellable),
+            ]);
+            this._static = {secureBoot, encrypted, mac};
+        }
+        const [ssh, reboot] = await Promise.all([
+            sshServer ? this._sshConfig(cancellable) : null,
+            this._rebootRequired(cancellable),
+        ]);
         return {
             updates,
             failedLogins,
@@ -304,9 +264,9 @@ export class SecurityMonitor {
             failedUnits,
             firewall,
             sshServer,
-            ssh: sshServer ? this._sshConfig() : null,
+            ssh,
             containers,
-            reboot: this._rebootRequired(),
+            reboot,
             ...this._static,
         };
     }
@@ -342,7 +302,7 @@ export class SecurityMonitor {
             security: native?.security ?? 0,
             flatpak: flatpak?.length ?? 0,
             packages: packages.slice(0, PACKAGE_LIMIT),
-            lastUpgrade: this._lastUpgrade(),
+            lastUpgrade: await this._lastUpgrade(cancellable),
         };
     }
 
@@ -452,7 +412,7 @@ export class SecurityMonitor {
             if (match)
                 return {total: Number(match[1]), security: Number(match[2])};
         }
-        const text = readSync(UPDATES_AVAILABLE);
+        const text = await readFile(UPDATES_AVAILABLE, cancellable);
         if (text !== null) {
             const numbers = text.match(/\d+/g)?.map(Number) ?? [];
             if (numbers.length)
@@ -499,10 +459,10 @@ export class SecurityMonitor {
      * When packages were last upgraded: the newest apt history entry, or the
      * modification time of the dpkg/pacman database.
      *
-     * @returns {number|null} unix seconds
+     * @returns {Promise<number|null>} unix seconds
      */
-    _lastUpgrade() {
-        const history = readSync(APT_HISTORY);
+    async _lastUpgrade(cancellable) {
+        const history = await readFile(APT_HISTORY, cancellable);
         if (history) {
             const dates = [...history.matchAll(/^Start-Date: (\S+)\s+(\S+)/gm)];
             const last = dates[dates.length - 1];
@@ -512,9 +472,13 @@ export class SecurityMonitor {
                     return time;
             }
         }
-        return fileTime('/var/lib/dpkg/status') ?? fileTime('/var/lib/pacman/local') ??
-            fileTime('/var/lib/rpm/rpmdb.sqlite') ?? fileTime('/var/lib/rpm/Packages') ??
-            fileTime('/var/log/zypp/history');
+        for (const path of ['/var/lib/dpkg/status', '/var/lib/pacman/local', '/var/lib/rpm/rpmdb.sqlite',
+            '/var/lib/rpm/Packages', '/var/log/zypp/history']) {
+            const time = await fileTime(path, cancellable);
+            if (time)
+                return time;
+        }
+        return null;
     }
 
     /**
@@ -522,18 +486,18 @@ export class SecurityMonitor {
      * (update-notifier's flag) or a newer kernel than the running one is
      * installed in /boot.
      *
-     * @returns {{packages: string[], kernel: string|null, running: string}|null}
+     * @returns {Promise<{packages: string[], kernel: string|null, running: string}|null>}
      *   null when no reboot is needed
      */
-    _rebootRequired() {
+    async _rebootRequired(cancellable) {
         const flagged = GLib.file_test(REBOOT_REQUIRED, GLib.FileTest.EXISTS);
         const packages = flagged
-            ? [...new Set((readSync(REBOOT_PACKAGES) ?? '').split('\n').map(l => l.trim()).filter(Boolean))]
+            ? [...new Set((await readFile(REBOOT_PACKAGES, cancellable) ?? '').split('\n').map(l => l.trim()).filter(Boolean))]
             : [];
-        const running = (readSync('/proc/sys/kernel/osrelease') ?? '').trim();
+        const running = (await readFile('/proc/sys/kernel/osrelease', cancellable) ?? '').trim();
         let kernel = null;
         if (running) {
-            const installed = listDir('/boot')
+            const installed = (await listDir('/boot', cancellable))
                 .filter(n => n.startsWith('vmlinuz-'))
                 .map(n => n.slice('vmlinuz-'.length))
                 .filter(v => /^\d/.test(v));
@@ -675,8 +639,11 @@ export class SecurityMonitor {
         const bus = Gio.DBus.system;
         const ufw = await this._unitActive(bus, ['ufw.service'], cancellable);
         if (ufw !== null) {
-            const enabled = /^ENABLED=yes/m.test(readSync('/etc/ufw/ufw.conf') ?? '');
-            const defaults = readSync('/etc/default/ufw') ?? '';
+            const [conf, defaults] = await Promise.all([
+                readFile('/etc/ufw/ufw.conf', cancellable),
+                readFile('/etc/default/ufw', cancellable),
+            ]).then(texts => texts.map(t => t ?? ''));
+            const enabled = /^ENABLED=yes/m.test(conf);
             const policy = name => defaults.match(new RegExp(`^DEFAULT_${name}_POLICY="?(\\w+)`, 'm'))?.[1]?.toLowerCase() ?? null;
             return {
                 name: 'ufw',
@@ -696,10 +663,10 @@ export class SecurityMonitor {
 
     // ---- static facts ----------------------------------------------------
 
-    _secureBoot() {
+    async _secureBoot(cancellable) {
         if (!this.hasEfi)
             return null;
-        const bytes = readBytes(SECURE_BOOT_VAR);
+        const bytes = await readBytes(SECURE_BOOT_VAR, cancellable);
         // 4 bytes of attributes followed by the value
         return bytes && bytes.length >= 5 ? bytes[4] === 1 : null;
     }
@@ -707,46 +674,45 @@ export class SecurityMonitor {
     /**
      * Mandatory access control: AppArmor (Ubuntu, Debian, SUSE) or SELinux (Fedora, RHEL).
      *
-     * @returns {{name: string, active: boolean, mode: string|null}|null} null when neither is built in
+     * @returns {Promise<{name: string, active: boolean, mode: string|null}|null>} null when neither is built in
      */
-    _mandatoryAccess() {
-        const selinuxState = () => {
-            const selinux = readSync(SELINUX_ENFORCE);
-            if (selinux === null)
-                return null;
+    async _mandatoryAccess(cancellable) {
+        const [selinux, apparmor, lsm] = await Promise.all([
+            readFile(SELINUX_ENFORCE, cancellable),
+            readFile(APPARMOR_ENABLED, cancellable),
+            readFile('/sys/kernel/security/lsm', cancellable),
+        ]);
+        let selinuxState = null;
+        if (selinux !== null) {
             const enforcing = selinux.trim() === '1';
-            return {name: 'SELinux', active: enforcing, mode: enforcing ? 'enforcing' : 'permissive'};
-        };
-        const apparmorState = () => {
-            const apparmor = readSync(APPARMOR_ENABLED);
-            return apparmor === null ? null : {name: 'AppArmor', active: apparmor.trim() === 'Y', mode: null};
-        };
+            selinuxState = {name: 'SELinux', active: enforcing, mode: enforcing ? 'enforcing' : 'permissive'};
+        }
+        const apparmorState = apparmor === null ? null : {name: 'AppArmor', active: apparmor.trim() === 'Y', mode: null};
         // The kernel lists the LSMs it actually booted with: a Fedora kernel
         // has AppArmor built in (its sysfs parameter exists) but runs SELinux.
-        const active = (readSync('/sys/kernel/security/lsm') ?? '').split(',').map(s => s.trim());
-        if (active.includes('selinux'))
-            return selinuxState() ?? apparmorState();
-        if (active.includes('apparmor'))
-            return apparmorState() ?? selinuxState();
-        return selinuxState() ?? apparmorState();
+        const active = (lsm ?? '').split(',').map(s => s.trim());
+        if (active.includes('apparmor') && !active.includes('selinux'))
+            return apparmorState ?? selinuxState;
+        return selinuxState ?? apparmorState;
     }
 
     /**
      * The settings of the SSH server that matter most, from sshd_config and
      * its drop-in directory (OpenSSH defaults when unset).
      *
-     * @returns {{port: string, passwordAuth: boolean, rootLogin: string}|null}
+     * @returns {Promise<{port: string, passwordAuth: boolean, rootLogin: string}|null>}
      *   null when the configuration is not readable
      */
-    _sshConfig() {
+    async _sshConfig(cancellable) {
         // OpenSSH keeps the first occurrence of a keyword, and Debian/Ubuntu
         // include sshd_config.d/*.conf at the top of sshd_config: the drop-ins
         // come first, the main file last
+        const dropIns = await listDir(`${SSHD_CONFIG}.d`, cancellable);
         const files = [
-            ...listDir(`${SSHD_CONFIG}.d`).filter(n => n.endsWith('.conf')).sort().map(n => `${SSHD_CONFIG}.d/${n}`),
+            ...dropIns.filter(n => n.endsWith('.conf')).sort().map(n => `${SSHD_CONFIG}.d/${n}`),
             SSHD_CONFIG,
         ];
-        const texts = files.map(readSync).filter(t => t !== null);
+        const texts = (await Promise.all(files.map(f => readFile(f, cancellable)))).filter(t => t !== null);
         if (!texts.length)
             return null;
         // settings inside "Match" blocks are conditional: ignore them
@@ -765,10 +731,10 @@ export class SecurityMonitor {
     /**
      * Whether the root file system sits on a LUKS volume (also through LVM).
      *
-     * @returns {boolean|null}
+     * @returns {Promise<boolean|null>}
      */
-    _rootEncrypted() {
-        const mounts = readSync('/proc/mounts') ?? '';
+    async _rootEncrypted(cancellable) {
+        const mounts = await readFile('/proc/mounts', cancellable) ?? '';
         const root = mounts.split('\n').map(l => l.split(' ')).find(cols => cols[1] === '/');
         if (!root)
             return null;
@@ -782,7 +748,7 @@ export class SecurityMonitor {
         const name = GLib.path_get_basename(device);
         if (!GLib.file_test(`/sys/class/block/${name}`, GLib.FileTest.IS_DIR))
             return null;
-        const isLuks = dev => (readSync(`/sys/class/block/${dev}/dm/uuid`) ?? '').startsWith('CRYPT-LUKS');
+        const isLuks = async dev => (await readFile(`/sys/class/block/${dev}/dm/uuid`, cancellable) ?? '').startsWith('CRYPT-LUKS');
         const queue = [name];
         const seen = new Set();
         while (queue.length) {
@@ -790,9 +756,9 @@ export class SecurityMonitor {
             if (seen.has(dev))
                 continue;
             seen.add(dev);
-            if (isLuks(dev))
+            if (await isLuks(dev))
                 return true;
-            queue.push(...listDir(`/sys/class/block/${dev}/slaves`));
+            queue.push(...await listDir(`/sys/class/block/${dev}/slaves`, cancellable));
         }
         return false;
     }

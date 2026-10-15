@@ -2,6 +2,18 @@
 
 Tutte le modifiche rilevanti del widget. Le date sono quelle di build dei pacchetti.
 
+## 1.8.1 — 2026-10-15
+
+- **Tutte le letture di file sono asincrone** (`lib/files.js`): sensori, batterie, GPU, processi,
+  interfacce, firewall, SSH, cifratura del disco, Secure Boot e aggiornamenti passano dall'API
+  asincrona di Gio invece di `GLib.file_get_contents`, come chiedono le linee guida di revisione
+  di extensions.gnome.org. La scoperta dei sensori avviene al primo campionamento invece che
+  all'attivazione. L'unica lettura sincrona rimasta è quella del catalogo `.mo` quando si sceglie
+  una lingua diversa da quella di sistema (un solo file all'avvio, come fa gettext).
+- Lo User-Agent delle richieste HTTP prende versione e URL da `Extension.metadata` invece di
+  rileggere `metadata.json`.
+- Tedesco: etichetta dell'umidità accorciata.
+
 ## 1.8.0 — 2026-10-15
 
 - **Spagnolo, francese e tedesco** oltre a italiano e inglese, nel menu *Lingua* delle preferenze.

@@ -172,7 +172,7 @@ costruiscono dai sorgenti con `./build.py` (vedi [Sviluppo](#sviluppo)).
 ### Pacchetto .deb (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.8.0_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.8.1_all.deb
 ```
 
 Poi **esci e rientra** nella sessione e attiva il widget dall'app *Estensioni*, oppure con
@@ -226,6 +226,7 @@ dall'indirizzo IP come in passato. Il nome della località viene ricavato da Ope
 extension/            sorgenti dell'estensione (ESM, GNOME 45+)
   extension.js        ciclo di vita, timer, posizionamento
   prefs.js            finestra delle preferenze (libadwaita)
+  lib/files.js        letture asincrone di file e directory (Gio) usate dai monitor
   lib/system.js       lettura di /proc e /sys (asincrona)
   lib/weather.js      Open-Meteo (meteo, aria), geolocalizzazione IP, Nominatim, INGV/USGS
   lib/geoclue.js      posizione dai servizi di localizzazione di sistema (GeoClue 2)

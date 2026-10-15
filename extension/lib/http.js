@@ -7,26 +7,23 @@ Gio._promisify(Soup.Session.prototype, 'send_and_read_async');
 
 const decoder = new TextDecoder();
 
-/**
- * An identifying User-Agent built from metadata.json (Nominatim's usage
- * policy asks for the application name and a way to contact its author).
- */
-function userAgent() {
-    try {
-        const dir = Gio.File.new_for_uri(import.meta.url).get_parent().get_parent();
-        const [, bytes] = dir.get_child('metadata.json').load_contents(null);
-        const meta = JSON.parse(decoder.decode(bytes));
-        return `desktop-sysweather/${meta['version-name']} (GNOME Shell extension; +${meta.url})`;
-    } catch {
-        return 'desktop-sysweather (GNOME Shell extension)';
-    }
-}
+// An identifying User-Agent (Nominatim's usage policy asks for the
+// application name and a way to contact its author); setAppInfo() fills in
+// the version and the project URL from metadata.json.
+let userAgent = 'desktop-sysweather (GNOME Shell extension)';
 
-const USER_AGENT = userAgent();
+/**
+ * @param {object} metadata the extension's metadata.json (Extension.metadata)
+ */
+export function setAppInfo(metadata) {
+    const version = metadata?.['version-name'];
+    if (version)
+        userAgent = `desktop-sysweather/${version} (GNOME Shell extension; +${metadata.url ?? ''})`;
+}
 
 export function newSession() {
     return new Soup.Session({
-        user_agent: USER_AGENT,
+        user_agent: userAgent,
         timeout: 25,
     });
 }

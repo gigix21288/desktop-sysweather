@@ -11,6 +11,7 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {_, fmt, nfmt, setLanguage} from './lib/i18n.js';
 import {FeedClient} from './lib/feeds.js';
+import {setAppInfo} from './lib/http.js';
 import {GeoclueLocator, systemLocationSettings} from './lib/geoclue.js';
 import {NetworkMonitor} from './lib/network.js';
 import {SecurityMonitor} from './lib/security.js';
@@ -70,6 +71,7 @@ export default class DesktopSysWeatherExtension extends Extension {
         this._gpuSampling = false;
         this._networkMonitor = new NetworkMonitor();
         this._securityMonitor = new SecurityMonitor();
+        setAppInfo(this.metadata);
         this._weatherClient = new WeatherClient();
         this._feeds = new FeedClient();
         this._sampleCount = 0;

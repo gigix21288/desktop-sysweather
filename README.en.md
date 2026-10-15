@@ -170,7 +170,7 @@ them from source with `./build.py` (see [Development](#development)).
 ### .deb package (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.8.0_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.8.1_all.deb
 ```
 
 Then **log out and back in** and enable the widget from the *Extensions* app, or with
@@ -222,6 +222,7 @@ address as before. The place name comes from OpenStreetMap (Nominatim).
 extension/            extension sources (ESM, GNOME 45+)
   extension.js        lifecycle, timers, positioning
   prefs.js            preferences window (libadwaita)
+  lib/files.js        asynchronous file and directory reads (Gio) shared by the monitors
   lib/system.js       /proc and /sys readers (asynchronous)
   lib/weather.js      Open-Meteo (weather, air), IP geolocation, Nominatim, INGV/USGS
   lib/geoclue.js      position from the system location services (GeoClue 2)

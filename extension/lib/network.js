@@ -6,6 +6,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import {listDir as listDirUnsorted, readFile} from './files.js';
 import {_} from './i18n.js';
 
 Gio._promisify(Gio.DBusConnection.prototype, 'call');
@@ -64,34 +65,8 @@ async function read(path, cancellable) {
     }
 }
 
-function readSync(path) {
-    try {
-        const [ok, bytes] = GLib.file_get_contents(path);
-        return ok ? decoder.decode(bytes).trim() : null;
-    } catch {
-        return null;
-    }
-}
-
-function listDir(path) {
-    const names = [];
-    let enumerator = null;
-    try {
-        enumerator = Gio.File.new_for_path(path).enumerate_children(
-            'standard::name', Gio.FileQueryInfoFlags.NONE, null);
-        let info;
-        while ((info = enumerator.next_file(null)))
-            names.push(info.get_name());
-    } catch {
-        // missing directory
-    } finally {
-        try {
-            enumerator?.close(null);
-        } catch {
-            // already closed
-        }
-    }
-    return names.sort();
+async function listDir(path, cancellable) {
+    return (await listDirUnsorted(path, cancellable)).sort();
 }
 
 /**
@@ -367,7 +342,7 @@ export class NetworkMonitor {
                 result.primary = await this._primary(bus, props, cancellable);
         }
         if (!result.vpn)
-            result.vpn = this._vpnFromSysfs();
+            result.vpn = await this._vpnFromSysfs(cancellable);
         return result;
     }
 
@@ -468,11 +443,11 @@ export class NetworkMonitor {
         }
     }
 
-    _vpnFromSysfs() {
-        for (const iface of listDir('/sys/class/net')) {
+    async _vpnFromSysfs(cancellable) {
+        for (const iface of await listDir('/sys/class/net', cancellable)) {
             if (!VPN_IFACES.test(iface))
                 continue;
-            const state = readSync(`/sys/class/net/${iface}/operstate`);
+            const state = await readFile(`/sys/class/net/${iface}/operstate`, cancellable, {trim: true});
             if (state === 'down')
                 continue;
             const kind = IFACE_KIND.find(([re]) => re.test(iface))?.[1] ?? 'VPN';
@@ -483,7 +458,7 @@ export class NetworkMonitor {
 
     async _fromProc(cancellable) {
         const route = await read('/proc/net/route', cancellable);
-        const result = {online: Gio.NetworkMonitor.get_default().network_available, primary: null, vpn: this._vpnFromSysfs()};
+        const result = {online: Gio.NetworkMonitor.get_default().network_available, primary: null, vpn: await this._vpnFromSysfs(cancellable)};
         // the default route with the lowest metric wins (the file is not sorted by metric)
         const cols = (route ?? '').split('\n').slice(1)
             .map(l => l.trim().split(/\s+/))
@@ -492,16 +467,16 @@ export class NetworkMonitor {
         if (!cols)
             return result;
         const iface = cols[0];
-        const wireless = listDir(`/sys/class/net/${iface}`).includes('wireless');
-        const nameservers = path => (readSync(path) ?? '').split('\n')
+        const wireless = (await listDir(`/sys/class/net/${iface}`, cancellable)).includes('wireless');
+        const nameservers = async path => (await readFile(path, cancellable) ?? '').split('\n')
             .filter(l => l.startsWith('nameserver'))
             .map(l => l.split(/\s+/)[1])
             .filter(a => a && !a.startsWith('127.') && a !== '::1');
         // with systemd-resolved /etc/resolv.conf only lists the 127.0.0.53
         // stub: the upstream servers are in resolved's own file
-        let dns = nameservers('/etc/resolv.conf');
+        let dns = await nameservers('/etc/resolv.conf');
         if (!dns.length)
-            dns = nameservers('/run/systemd/resolve/resolv.conf');
+            dns = await nameservers('/run/systemd/resolve/resolv.conf');
         result.primary = {
             id: iface,
             type: wireless ? 'wifi' : 'wired',

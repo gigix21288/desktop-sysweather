@@ -7,6 +7,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
 
 import {_, availableLanguages, fmt, languageName, setLanguage} from './lib/i18n.js';
 import {systemLocationSettings} from './lib/geoclue.js';
+import {setAppInfo} from './lib/http.js';
 import {WeatherClient, placeLabel} from './lib/weather.js';
 
 // Signal connections made while the pages are built, so they can be dropped
@@ -152,6 +153,7 @@ export default class DesktopSysWeatherPreferences extends ExtensionPreferences {
 
         // the city search client outlives the pages, which are rebuilt when
         // the language changes
+        setAppInfo(this.metadata);
         const client = new WeatherClient();
         window.connect('close-request', () => {
             client.destroy();

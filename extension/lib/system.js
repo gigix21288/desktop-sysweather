@@ -4,6 +4,8 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import {deviceOf, listDir as listDirUnsorted, readFile} from './files.js';
+
 Gio._promisify(Gio.File.prototype, 'load_contents_async');
 Gio._promisify(Gio.File.prototype, 'query_filesystem_info_async');
 
@@ -15,13 +17,9 @@ const CPU_LABELS = ['Package id 0', 'Tdie', 'Tctl', 'CPU'];
 const GPU_CHIPS = ['amdgpu', 'radeon', 'nouveau', 'xe'];
 const NVIDIA_VENDOR = '0x10de';
 
-function readSync(path) {
-    try {
-        const [ok, bytes] = GLib.file_get_contents(path);
-        return ok ? decoder.decode(bytes).trim() : null;
-    } catch {
-        return null;
-    }
+/** A sysfs value: the file's text without the trailing newline, null when missing. */
+function readValue(path, cancellable) {
+    return readFile(path, cancellable, {trim: true});
 }
 
 async function read(path, cancellable) {
@@ -41,24 +39,9 @@ async function readNumber(path, cancellable) {
     return Number.isFinite(value) ? value : null;
 }
 
-function listDir(path) {
-    const names = [];
-    let enumerator = null;
-    try {
-        enumerator = Gio.File.new_for_path(path).enumerate_children(
-            'standard::name', Gio.FileQueryInfoFlags.NONE, null);
-        let info;
-        while ((info = enumerator.next_file(null)))
-            names.push(info.get_name());
-    } catch {
-        // missing directory: nothing to report
-    } finally {
-        try {
-            enumerator?.close(null);
-        } catch {
-            // already closed
-        }
-    }
+/** Directory entries in natural order (card1 before card10). */
+async function listDir(path, cancellable) {
+    const names = await listDirUnsorted(path, cancellable);
     return names.sort((a, b) => a.localeCompare(b, undefined, {numeric: true}));
 }
 
@@ -77,13 +60,13 @@ function isPhysicalIface(iface) {
     return physical;
 }
 
-function findTempInput(dir) {
-    const inputs = listDir(dir).filter(n => /^temp\d+_input$/.test(n));
+async function findTempInput(dir, cancellable) {
+    const inputs = (await listDir(dir, cancellable)).filter(n => /^temp\d+_input$/.test(n));
     if (inputs.length === 0)
         return null;
     for (const wanted of CPU_LABELS) {
         for (const input of inputs) {
-            const label = readSync(`${dir}/${input.replace('_input', '_label')}`);
+            const label = await readValue(`${dir}/${input.replace('_input', '_label')}`, cancellable);
             if (label === wanted)
                 return `${dir}/${input}`;
         }
@@ -91,15 +74,15 @@ function findTempInput(dir) {
     return `${dir}/${inputs[0]}`;
 }
 
-function discoverSensors() {
+async function discoverSensors(cancellable) {
     const chips = new Map();
     const fans = [];
-    for (const hw of listDir('/sys/class/hwmon')) {
+    for (const hw of await listDir('/sys/class/hwmon', cancellable)) {
         const dir = `/sys/class/hwmon/${hw}`;
-        const name = readSync(`${dir}/name`);
+        const name = await readValue(`${dir}/name`, cancellable);
         if (name && !chips.has(name))
             chips.set(name, dir);
-        for (const entry of listDir(dir)) {
+        for (const entry of await listDir(dir, cancellable)) {
             if (/^fan\d+_input$/.test(entry))
                 fans.push(`${dir}/${entry}`);
         }
@@ -110,12 +93,12 @@ function discoverSensors() {
         // ACPI zones are named e.g. "acpitz" or "acpitz_0"
         const dir = chips.get(chip) ??
             [...chips.entries()].find(([n]) => n.startsWith(`${chip}_`))?.[1];
-        if (dir && (cpuTemp = findTempInput(dir)))
+        if (dir && (cpuTemp = await findTempInput(dir, cancellable)))
             break;
     }
     if (!cpuTemp) {
-        for (const zone of listDir('/sys/class/thermal')) {
-            const type = readSync(`/sys/class/thermal/${zone}/type`);
+        for (const zone of await listDir('/sys/class/thermal', cancellable)) {
+            const type = await readValue(`/sys/class/thermal/${zone}/type`, cancellable);
             if (type === 'x86_pkg_temp' || type === 'cpu-thermal') {
                 cpuTemp = `/sys/class/thermal/${zone}/temp`;
                 break;
@@ -126,51 +109,73 @@ function discoverSensors() {
     let gpuTemp = null;
     for (const chip of GPU_CHIPS) {
         const dir = chips.get(chip);
-        if (dir && (gpuTemp = findTempInput(dir)))
+        if (dir && (gpuTemp = await findTempInput(dir, cancellable)))
             break;
     }
 
-    const batteries = listDir('/sys/class/power_supply')
-        .map(n => `/sys/class/power_supply/${n}`)
-        .filter(dir => readSync(`${dir}/type`) === 'Battery' &&
-            readSync(`${dir}/scope`) !== 'Device' &&
-            readSync(`${dir}/capacity`) !== null)
-        .map(dir => {
-            // energy_* (µWh) with power_now (µW), or charge_* (µAh) with
-            // current_now (µA): the ratio is hours either way
-            const energy = readSync(`${dir}/energy_now`) !== null;
-            const prefix = energy ? 'energy' : 'charge';
-            const has = f => (readSync(`${dir}/${f}`) !== null ? `${dir}/${f}` : null);
-            return {
-                dir,
-                now: has(`${prefix}_now`),
-                full: has(`${prefix}_full`),
-                rate: has(energy ? 'power_now' : 'current_now'),
-            };
+    const batteries = [];
+    for (const n of await listDir('/sys/class/power_supply', cancellable)) {
+        const dir = `/sys/class/power_supply/${n}`;
+        const [type, scope, capacity] = await Promise.all([
+            readValue(`${dir}/type`, cancellable),
+            readValue(`${dir}/scope`, cancellable),
+            readValue(`${dir}/capacity`, cancellable),
+        ]);
+        if (type !== 'Battery' || scope === 'Device' || capacity === null)
+            continue;
+        // energy_* (µWh) with power_now (µW), or charge_* (µAh) with
+        // current_now (µA): the ratio is hours either way
+        const energy = await readValue(`${dir}/energy_now`, cancellable) !== null;
+        const prefix = energy ? 'energy' : 'charge';
+        const has = async f => (await readValue(`${dir}/${f}`, cancellable) !== null ? `${dir}/${f}` : null);
+        batteries.push({
+            dir,
+            now: await has(`${prefix}_now`),
+            full: await has(`${prefix}_full`),
+            rate: await has(energy ? 'power_now' : 'current_now'),
         });
+    }
 
     return {cpuTemp, gpuTemp, fans, batteries};
 }
 
-function parseOsRelease() {
-    const text = readSync('/etc/os-release') ?? '';
+async function parseOsRelease(cancellable) {
+    const text = await readFile('/etc/os-release', cancellable) ?? '';
     const match = text.match(/^PRETTY_NAME="?([^"\n]*)"?/m);
     return match ? match[1] : 'Linux';
 }
 
 export class SystemMonitor {
     constructor() {
-        this._sensors = discoverSensors();
+        this._sensors = {cpuTemp: null, gpuTemp: null, fans: [], batteries: []};
+        this._ready = null;
         this._prevCpu = null;
         this._prevNet = null;
 
         this.hostname = GLib.get_host_name();
-        this.distro = parseOsRelease();
-        this.kernel = (readSync('/proc/sys/kernel/osrelease') ?? '').replace(/-generic$/, '');
-        this.hasBattery = this._sensors.batteries.length > 0;
-        this.hasFans = this._sensors.fans.length > 0;
-        this.hasGpuTemp = this._sensors.gpuTemp !== null;
-        const [root, home] = [SystemMonitor._deviceOf('/'), SystemMonitor._deviceOf(GLib.get_home_dir())];
+        this.distro = 'Linux';
+        this.kernel = '';
+        this.hasBattery = false;
+        this.hasFans = false;
+        this.hasGpuTemp = false;
+        this._separateHome = false;
+    }
+
+    /** Sensor discovery and the static facts, once, before the first sample. */
+    async _init(cancellable) {
+        const [sensors, distro, kernel, root, home] = await Promise.all([
+            discoverSensors(cancellable),
+            parseOsRelease(cancellable),
+            readValue('/proc/sys/kernel/osrelease', cancellable),
+            deviceOf('/', cancellable),
+            deviceOf(GLib.get_home_dir(), cancellable),
+        ]);
+        this._sensors = sensors;
+        this.distro = distro;
+        this.kernel = (kernel ?? '').replace(/-generic$/, '');
+        this.hasBattery = sensors.batteries.length > 0;
+        this.hasFans = sensors.fans.length > 0;
+        this.hasGpuTemp = sensors.gpuTemp !== null;
         this._separateHome = root !== null && home !== null && root !== home;
     }
 
@@ -265,15 +270,6 @@ export class SystemMonitor {
         return this._fsUsage(GLib.get_home_dir(), cancellable);
     }
 
-    static _deviceOf(path) {
-        try {
-            return Gio.File.new_for_path(path).query_info('unix::device', Gio.FileQueryInfoFlags.NONE, null)
-                .get_attribute_uint32('unix::device');
-        } catch {
-            return null;
-        }
-    }
-
     /**
      * All batteries combined (dual-battery laptops): the level is the total
      * stored energy over the total capacity when the driver reports it;
@@ -351,6 +347,8 @@ export class SystemMonitor {
      * @returns {Promise<object>}
      */
     async sample(cancellable) {
+        this._ready ??= this._init(cancellable);
+        await this._ready;
         // the counters are stamped as soon as they are read, before the slow
         // sensor reads, so the rate uses the right elapsed time
         const netdev = await read('/proc/net/dev', cancellable);
@@ -414,12 +412,14 @@ export class ProcessMonitor {
     constructor() {
         this._prev = new Map();
         this._prevTotal = null;
-        this._pageSize = this._detectPageSize();
+        this._pageSize = null;
     }
 
-    _detectPageSize() {
-        const statm = readSync('/proc/self/statm');
-        const status = readSync('/proc/self/status');
+    async _detectPageSize(cancellable) {
+        const [statm, status] = await Promise.all([
+            readValue('/proc/self/statm', cancellable),
+            readValue('/proc/self/status', cancellable),
+        ]);
         const pages = Number(statm?.split(/\s+/)[0]);
         const kb = Number(status?.match(/^VmSize:\s+(\d+)/m)?.[1]);
         if (pages > 0 && kb > 0) {
@@ -430,10 +430,10 @@ export class ProcessMonitor {
     }
 
     /** comm is cut at 15 characters: recover the program name from cmdline. */
-    _fullName(pid, comm) {
+    async _fullName(pid, comm, cancellable) {
         if (comm.length < 15)
             return comm;
-        const cmdline = readSync(`/proc/${pid}/cmdline`);
+        const cmdline = await readValue(`/proc/${pid}/cmdline`, cancellable);
         const program = GLib.path_get_basename((cmdline ?? '').split('\0')[0]);
         return program.startsWith(comm.slice(0, 10)) ? program : comm;
     }
@@ -444,17 +444,20 @@ export class ProcessMonitor {
      *   mem: Array<{name: string, bytes: number}>}|null>} null on the first call
      */
     async sample(cancellable) {
-        const stat = readSync('/proc/stat');
+        this._pageSize ??= await this._detectPageSize(cancellable);
+        const stat = await readValue('/proc/stat', cancellable);
         // the first 8 fields, like SystemMonitor: guest time is already counted in user/nice
         const total = stat?.split('\n')[0].trim().split(/\s+/).slice(1, 9).map(Number).reduce((a, b) => a + b, 0);
         if (!total)
             return null;
-        const pids = listDir('/proc').filter(n => /^\d+$/.test(n));
+        const pids = (await listDir('/proc', cancellable)).filter(n => /^\d+$/.test(n));
         const current = new Map();
         const byName = new Map();
         for (let i = 0; i < pids.length; i += PROCESS_CHUNK) {
-            for (const pid of pids.slice(i, i + PROCESS_CHUNK)) {
-                const text = readSync(`/proc/${pid}/stat`);
+            const chunk = pids.slice(i, i + PROCESS_CHUNK);
+            const texts = await Promise.all(chunk.map(pid => readValue(`/proc/${pid}/stat`, cancellable)));
+            for (const [j, pid] of chunk.entries()) {
+                const text = texts[j];
                 if (!text)
                     continue;
                 const open = text.indexOf('(');
@@ -464,7 +467,7 @@ export class ProcessMonitor {
                 const ticks = Number(fields[11]) + Number(fields[12]);
                 const rss = Number(fields[21]) * this._pageSize;
                 current.set(pid, ticks);
-                const name = Object.hasOwn(PROCESS_NAMES, comm) ? PROCESS_NAMES[comm] : this._fullName(pid, comm);
+                const name = Object.hasOwn(PROCESS_NAMES, comm) ? PROCESS_NAMES[comm] : await this._fullName(pid, comm, cancellable);
                 const entry = byName.get(name) ?? {name, ticks: 0, prevTicks: 0, bytes: 0};
                 entry.ticks += ticks;
                 entry.prevTicks += this._prev.get(pid) ?? ticks;
@@ -524,21 +527,32 @@ export class GpuMonitor {
         this._freqPath = null;
         this._freqScale = 1;
         this._nvidiaPower = null;
-        for (const card of listDir('/sys/class/drm').filter(n => /^card\d+$/.test(n))) {
+        this._nvidiaSmi = null;
+        this._nvidiaFailures = 0;
+        this._prevClients = new Map();
+        this._prevTime = null;
+        this._fdinfoFailures = 0;
+        this._ready = null;
+    }
+
+    /** Finds the sysfs files of the GPU once, before the first sample. */
+    async _discover(cancellable) {
+        for (const card of (await listDir('/sys/class/drm', cancellable)).filter(n => /^card\d+$/.test(n))) {
             const dir = `/sys/class/drm/${card}`;
-            if (!this._nvidiaPower && readSync(`${dir}/device/vendor`) === NVIDIA_VENDOR)
+            if (!this._nvidiaPower && await readValue(`${dir}/device/vendor`, cancellable) === NVIDIA_VENDOR)
                 this._nvidiaPower = `${dir}/device/power/runtime_status`;
-            if (!this._busyPath && readSync(`${dir}/device/gpu_busy_percent`) !== null)
+            if (!this._busyPath && await readValue(`${dir}/device/gpu_busy_percent`, cancellable) !== null)
                 this._busyPath = `${dir}/device/gpu_busy_percent`;
-            if (!this._vramPaths && readSync(`${dir}/device/mem_info_vram_used`) !== null)
+            if (!this._vramPaths && await readValue(`${dir}/device/mem_info_vram_used`, cancellable) !== null)
                 this._vramPaths = [`${dir}/device/mem_info_vram_used`, `${dir}/device/mem_info_vram_total`];
             if (!this._freqPath) {
+                const hwmon = (await listDir(`${dir}/device/hwmon`, cancellable))[0];
                 for (const [path, scale] of [
                     [`${dir}/gt_act_freq_mhz`, 1],
                     [`${dir}/gt/gt0/rps_act_freq_mhz`, 1],
-                    [`${dir}/device/hwmon/${listDir(`${dir}/device/hwmon`)[0]}/freq1_input`, 1e-6],
+                    [`${dir}/device/hwmon/${hwmon}/freq1_input`, 1e-6],
                 ]) {
-                    if (readSync(path) !== null) {
+                    if (await readValue(path, cancellable) !== null) {
                         this._freqPath = path;
                         this._freqScale = scale;
                         break;
@@ -549,10 +563,6 @@ export class GpuMonitor {
         // nvidia-smi only makes sense with the proprietary driver loaded
         const nvidiaDriver = GLib.file_test('/proc/driver/nvidia/version', GLib.FileTest.EXISTS);
         this._nvidiaSmi = this._busyPath || !nvidiaDriver ? null : GLib.find_program_in_path('nvidia-smi');
-        this._nvidiaFailures = 0;
-        this._prevClients = new Map();
-        this._prevTime = null;
-        this._fdinfoFailures = 0;
     }
 
     /**
@@ -563,6 +573,8 @@ export class GpuMonitor {
      *   (total is null for integrated GPUs sharing system memory)
      */
     async sample(cancellable) {
+        this._ready ??= this._discover(cancellable);
+        await this._ready;
         const freq = await readNumber(this._freqPath, cancellable);
         const result = {load: null, temp: null, freq: freq === null ? null : Math.round(freq * this._freqScale), vram: null, source: 'none'};
         if (this._vramPaths) {
@@ -596,7 +608,7 @@ export class GpuMonitor {
     async _nvidia(cancellable) {
         // On Optimus laptops the discrete GPU sleeps (D3cold) when unused and
         // nvidia-smi would wake it up every few seconds: report it as idle.
-        if (this._nvidiaPower && readSync(this._nvidiaPower) === 'suspended')
+        if (this._nvidiaPower && await readValue(this._nvidiaPower, cancellable) === 'suspended')
             return {load: 0, temp: null, freq: null, vram: null};
         let process = null;
         try {
@@ -680,13 +692,13 @@ export class GpuMonitor {
         if (this._fdinfoFailures >= 3)
             return null;
         const clients = new Map();
-        const pids = listDir('/proc').filter(n => /^\d+$/.test(n));
+        const pids = (await listDir('/proc', cancellable)).filter(n => /^\d+$/.test(n));
         let found = false;
         // yield to the compositor every FD_BUDGET descriptors rather than every
         // N processes: a browser or an IDE alone can hold thousands of them
         let budget = FD_BUDGET;
         for (const pid of pids) {
-            for (const fd of listDir(`/proc/${pid}/fd`)) {
+            for (const fd of await listDir(`/proc/${pid}/fd`, cancellable)) {
                 if (--budget <= 0) {
                     budget = FD_BUDGET;
                     if (cancellable?.is_cancelled())
@@ -701,7 +713,7 @@ export class GpuMonitor {
                 }
                 if (!target.startsWith('/dev/dri/'))
                     continue;
-                const text = readSync(`/proc/${pid}/fdinfo/${fd}`);
+                const text = await readValue(`/proc/${pid}/fdinfo/${fd}`, cancellable);
                 const info = text ? this._parseFdinfo(text) : null;
                 if (!info)
                     continue;
