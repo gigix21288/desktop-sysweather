@@ -1,0 +1,1224 @@
+# Italian translation for Desktop System & Weather Widget.
+msgid ""
+msgstr ""
+"Project-Id-Version: desktop-sysweather 1.6.0\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "%d Flatpak"
+msgstr "%d Flatpak"
+
+msgid "%d RPM"
+msgstr "%d RPM"
+
+msgid "%d d %d h"
+msgstr "%d g %d h"
+
+msgid "%d d ago"
+msgstr "%d g fa"
+
+msgid "%d h %d min"
+msgstr "%d h %d min"
+
+msgid "%d h ago"
+msgstr "%d h fa"
+
+msgid "%d km away"
+msgstr "a %d km"
+
+msgid "%d listening"
+msgstr "%d porte in ascolto"
+
+msgid "%d min"
+msgstr "%d min"
+
+msgid "%d min ago"
+msgstr "%d min fa"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "%d security"
+msgstr "%d di sicurezza"
+
+msgid "%d total"
+msgstr "%d totali"
+
+msgid "%d users logged in"
+msgstr "%d utenti connessi"
+
+msgid "%d%% loss"
+msgstr "%d%% persi"
+
+msgid "%s (not connected)"
+msgstr "%s (non collegato)"
+
+msgid "%s alert · %s"
+msgstr "Allerta %s · %s"
+
+msgid "%s confines system services and browsers with per-program profiles, limiting what a compromised program can touch."
+msgstr "%s confina i servizi di sistema e i browser con profili per programma, limitando ciò che un programma compromesso può toccare."
+
+msgid "%s dropped: your traffic is no longer going through the VPN."
+msgstr "%s è caduta: il traffico non passa più dalla VPN."
+
+msgid "%s from %s"
+msgstr "%s da %s"
+
+msgid "%s is built into the kernel but disabled: programs run without mandatory access control."
+msgstr "%s è compilato nel kernel ma disattivato: i programmi girano senza controllo di accesso obbligatorio."
+
+msgid "%s off"
+msgstr "%s disattivo"
+
+msgid "%s on"
+msgstr "%s attivo"
+
+msgid "%s unreachable"
+msgstr "%s non raggiungibile"
+
+msgid "0% = fully transparent"
+msgstr "0% = completamente trasparente"
+
+msgid "A popup with the details of a chip, a CVE or a news item when the pointer rests on it"
+msgstr "Un riquadro con i dettagli di un indicatore, di una CVE o di una notizia quando il puntatore si ferma sopra"
+
+msgid "Active: unsolicited incoming connections are filtered."
+msgstr "Attivo: le connessioni in ingresso non richieste vengono filtrate."
+
+msgid "Added %s"
+msgstr "Aggiunta il %s"
+
+msgid "Added in the last two days: patch exposed systems first."
+msgstr "Aggiunta negli ultimi due giorni: aggiorna per primi i sistemi esposti."
+
+msgid "Added to the CISA KEV catalogue: patch exposed systems first."
+msgstr "Aggiunta al catalogo CISA KEV: aggiorna prima i sistemi esposti."
+
+msgid "Air fair"
+msgstr "Aria discreta"
+
+msgid "Air good"
+msgstr "Aria buona"
+
+msgid "Air hazardous"
+msgstr "Aria pericolosa"
+
+msgid "Air moderate"
+msgstr "Aria moderata"
+
+msgid "Air poor"
+msgstr "Aria scadente"
+
+msgid "Air quality, UV index and pollen"
+msgstr "Qualità dell'aria, indice UV e pollini"
+
+msgid "Air very poor"
+msgstr "Aria pessima"
+
+msgid "Alerts of the national weather service for your region, relayed by MeteoAlarm (Europe)"
+msgstr "Allerte del servizio meteorologico nazionale per la tua regione, diffuse da MeteoAlarm (Europa)"
+
+msgid "All good"
+msgstr "Tutto ok"
+
+msgid "Appearance"
+msgstr "Aspetto"
+
+msgid "Applies to the widget and to this window"
+msgstr "Vale per il widget e per questa finestra"
+
+msgid "Apply the vendor's updates or mitigations, or stop using the product."
+msgstr "Applica aggiornamenti o mitigazioni del produttore, oppure smetti di usare il prodotto."
+
+msgid "Automatic"
+msgstr "Automatica"
+
+msgid "Background opacity"
+msgstr "Opacità dello sfondo"
+
+msgid "Battery"
+msgstr "Batteria"
+
+msgid "Battery ⚡"
+msgstr "Batteria ⚡"
+
+msgid "Bottom center"
+msgstr "In basso al centro"
+
+msgid "Bottom left"
+msgstr "In basso a sinistra"
+
+msgid "Bottom right"
+msgstr "In basso a destra"
+
+msgid "Burst of failed logins"
+msgstr "Raffica di accessi falliti"
+
+msgid "CERT-AGID news (Italian)"
+msgstr "Notizie CERT-AGID (in italiano)"
+
+msgid "CERT-AGID · latest news"
+msgstr "CERT-AGID · ultime notizie"
+
+msgid "CISA KEV is the US catalogue of vulnerabilities known to be exploited in the wild; CERT-AGID is the Italian government CSIRT."
+msgstr "CISA KEV è il catalogo statunitense delle vulnerabilità di cui è noto lo sfruttamento attivo; CERT-AGID è lo CSIRT della pubblica amministrazione italiana."
+
+msgid "CISA Known Exploited Vulnerabilities"
+msgstr "CISA Known Exploited Vulnerabilities"
+
+msgid "CPU"
+msgstr "CPU"
+
+msgid "CPU load"
+msgstr "Carico CPU"
+
+msgid "CPU, memory and disk"
+msgstr "CPU, memoria e disco"
+
+msgid "Calm day, no alerts"
+msgstr "Giornata tranquilla, nessun avviso"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Catalogue of %d vulnerabilities exploited in the wild, updated %s."
+msgstr "Catalogo di %d vulnerabilità sfruttate attivamente, aggiornato il %s."
+
+msgid "Center"
+msgstr "Al centro"
+
+msgid "Check every (minutes)"
+msgstr "Controlla ogni (minuti)"
+
+msgid "Clear night: look up at the stars"
+msgstr "Notte serena: alza gli occhi alle stelle"
+
+msgid "Clear sky"
+msgstr "Sereno"
+
+msgid "Click to open in the browser"
+msgstr "Clic per aprire nel browser"
+
+msgid "Computer name and uptime"
+msgstr "Nome del computer e tempo di attività"
+
+msgid "Connected"
+msgstr "Connesso"
+
+msgid "Containers · %s"
+msgstr "Container · %s"
+
+msgid "Content"
+msgstr "Contenuto"
+
+msgid "Current location"
+msgstr "Posizione attuale"
+
+msgid "Current weather"
+msgstr "Meteo attuale"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "DNS (+%d)"
+msgstr "DNS (+%d)"
+
+msgid "Dark"
+msgstr "Scuro"
+
+msgid "Default policy · incoming %s · outgoing %s"
+msgstr "Politica predefinita · ingresso %s · uscita %s"
+
+msgid "Desktop notifications for the events that matter even when the widget is covered by windows."
+msgstr "Notifiche desktop per gli eventi importanti, anche quando il widget è coperto dalle finestre."
+
+msgid "Details on hover"
+msgstr "Dettagli al passaggio del mouse"
+
+msgid "Devices on the local network"
+msgstr "Dispositivi nella rete locale"
+
+msgid "Disabled: the position is estimated from your IP address"
+msgstr "Disattivati: la posizione viene stimata dall'indirizzo IP"
+
+msgid "Disk"
+msgstr "Disco"
+
+msgid "Disk encrypted"
+msgstr "Disco cifrato"
+
+msgid "Disk encryption"
+msgstr "Cifratura del disco"
+
+msgid "Disk not encrypted"
+msgstr "Disco non cifrato"
+
+msgid "Distance from the screen edges, in pixels"
+msgstr "Distanza dai bordi dello schermo, in pixel"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Drizzle"
+msgstr "Pioviggine"
+
+msgid "Earthquakes"
+msgstr "Terremoti"
+
+msgid "Earthquakes · %d km · 7 days · %s"
+msgstr "Terremoti · %d km · 7 giorni · %s"
+
+msgid "Enabled: the position comes from Wi-Fi, GPS or the network"
+msgstr "Attivi: la posizione arriva da Wi-Fi, GPS o rete"
+
+msgid "Ethernet"
+msgstr "Ethernet"
+
+msgid "Events of the last 7 days around the weather location. Data from INGV in Italy and from USGS elsewhere."
+msgstr "Eventi degli ultimi 7 giorni intorno alla posizione del meteo. Dati INGV in Italia, USGS altrove."
+
+msgid "Every check passed: firewall, updates, logins, sessions, systemd, Secure Boot, encryption."
+msgstr "Tutti i controlli superati: firewall, aggiornamenti, accessi, sessioni, systemd, Secure Boot, cifratura."
+
+msgid "Every option on every page goes back to its default, including the chosen city"
+msgstr "Ogni opzione di ogni pagina torna al valore predefinito, compresa la città scelta"
+
+msgid "Everything is read locally from NetworkManager and /proc. The public IP address is looked up at ipwho.is; the latency is the time to open a TCP connection to the chosen host."
+msgstr "Tutto viene letto in locale da NetworkManager e da /proc. L'IP pubblico viene chiesto a ipwho.is; la latenza è il tempo per aprire una connessione TCP verso l'host scelto."
+
+msgid "Exposed:"
+msgstr "Esposte:"
+
+msgid "Fan"
+msgstr "Ventola"
+
+msgid "Feeds"
+msgstr "Feed"
+
+msgid "Feels %s"
+msgstr "Percepita %s"
+
+msgid "Firewall %s"
+msgstr "Firewall %s"
+
+msgid "Firewall %s off"
+msgstr "Firewall %s spento"
+
+msgid "Firewall, pending updates, reboot required, failed logins in the last 24 hours, remote sessions, SSH server, failed systemd units, Secure Boot, disk encryption, AppArmor/SELinux and running containers. Failed logins need the journal to be readable (adm or systemd-journal group)."
+msgstr "Firewall, aggiornamenti in sospeso, riavvio richiesto, accessi falliti nelle ultime 24 ore, sessioni remote, server SSH, unità systemd in errore, Secure Boot, cifratura del disco, AppArmor/SELinux e container in esecuzione. Gli accessi falliti richiedono che il journal sia leggibile (gruppo adm o systemd-journal)."
+
+msgid "First quarter"
+msgstr "Primo quarto"
+
+msgid "Fog"
+msgstr "Nebbia"
+
+msgid "Fog: drive carefully"
+msgstr "Nebbia: guida con prudenza"
+
+msgid "Freezing drizzle"
+msgstr "Pioviggine gelata"
+
+msgid "Freezing rain"
+msgstr "Pioggia gelata"
+
+msgid "Freezing: bundle up"
+msgstr "Gelo: copriti bene"
+
+msgid "From the ARP cache: only devices that talked to this computer recently are listed."
+msgstr "Dalla cache ARP: sono elencati solo i dispositivi che hanno comunicato di recente con questo computer."
+
+msgid "Full moon"
+msgstr "Luna piena"
+
+msgid "G%d severe storm · aurora"
+msgstr "G%d tempesta severa · aurora"
+
+msgid "G1 minor storm"
+msgstr "G1 tempesta minore"
+
+msgid "G2 moderate storm"
+msgstr "G2 tempesta moderata"
+
+msgid "G3 strong storm · aurora"
+msgstr "G3 tempesta forte · aurora"
+
+msgid "GPU"
+msgstr "GPU"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "Geomagnetic activity (NOAA Kp index, aurora alerts) and how far the ISS is"
+msgstr "Attività geomagnetica (indice Kp NOAA, allerte aurora) e distanza della ISS"
+
+msgid "Great for drying laundry until %s"
+msgstr "Ottimo per stendere il bucato fino alle %s"
+
+msgid "Heat: drink water and seek shade"
+msgstr "Afa: bevi acqua e cerca l'ombra"
+
+msgid "Heavy rain"
+msgstr "Pioggia forte"
+
+msgid "Heavy snow"
+msgstr "Neve forte"
+
+msgid "High %s pollen today"
+msgstr "Pollini di %s alti oggi"
+
+msgid "High UV around %s: sunscreen"
+msgstr "UV alto verso le %s: crema solare"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Hover a chip for the details."
+msgstr "Passa il mouse su un indicatore per i dettagli."
+
+msgid "Humidity %s"
+msgstr "Umidità %s"
+
+msgid "IP location"
+msgstr "posizione da IP"
+
+msgid "ISS %s km away"
+msgstr "ISS a %s km"
+
+msgid "ISS overhead now"
+msgstr "ISS sopra di te adesso"
+
+msgid "ISS overhead now · look up!"
+msgstr "ISS sopra di te adesso · guarda in alto!"
+
+msgid "Imperial (°F, mph)"
+msgstr "Imperiale (°F, mph)"
+
+msgid "Installed but not enabled: every listening port is reachable from the network. Enable it with \"sudo ufw enable\" or from the firewall settings."
+msgstr "Installato ma non attivo: ogni porta in ascolto è raggiungibile dalla rete. Attivalo con \"sudo ufw enable\" o dalle impostazioni del firewall."
+
+msgid "Interface"
+msgstr "Interfaccia"
+
+msgid "Issued by the national weather service (MeteoAlarm)."
+msgstr "Emessa dal servizio meteorologico nazionale (MeteoAlarm)."
+
+msgid "Issued by the national weather service and relayed by MeteoAlarm. Click for the details."
+msgstr "Emesse dal servizio meteorologico nazionale e diffuse da MeteoAlarm. Clic per i dettagli."
+
+msgid "Kernel %s is installed but %s is still running."
+msgstr "È installato il kernel %s ma è ancora in esecuzione il %s."
+
+msgid "Language"
+msgstr "Lingua"
+
+msgid "Last quarter"
+msgstr "Ultimo quarto"
+
+msgid "Last upgrade: %s"
+msgstr "Ultimo aggiornamento: %s"
+
+msgid "Latency graph"
+msgstr "Grafico della latenza"
+
+msgid "Latency host"
+msgstr "Host per la latenza"
+
+msgid "Layout"
+msgstr "Disposizione"
+
+msgid "Light"
+msgstr "Chiaro"
+
+msgid "Light rain"
+msgstr "Pioggia debole"
+
+msgid "Light showers"
+msgstr "Rovesci deboli"
+
+msgid "Light snow"
+msgstr "Neve debole"
+
+msgid "Listening ports and connections"
+msgstr "Porte in ascolto e connessioni"
+
+msgid "Living sky background"
+msgstr "Sfondo cielo vivo"
+
+msgid "Loading weather…"
+msgstr "Caricamento meteo…"
+
+msgid "Local IP"
+msgstr "IP locale"
+
+msgid "Locating…"
+msgstr "Rilevamento posizione…"
+
+msgid "Location"
+msgstr "Posizione"
+
+msgid "Mainly clear"
+msgstr "Prevalentemente sereno"
+
+msgid "Manual"
+msgstr "Manuale"
+
+msgid "Margin"
+msgstr "Margine"
+
+msgid "Mask the public IP"
+msgstr "Maschera l'IP pubblico"
+
+msgid "Max %s · Min %s"
+msgstr "Max %s · Min %s"
+
+msgid "Memory"
+msgstr "Memoria"
+
+msgid "Metric (°C, km/h)"
+msgstr "Metrico (°C, km/h)"
+
+msgid "Midnight sun"
+msgstr "Sole di mezzanotte"
+
+msgid "Minimum magnitude"
+msgstr "Magnitudo minima"
+
+msgid "Monitor"
+msgstr "Monitor"
+
+msgid "Network"
+msgstr "Rete"
+
+msgid "Network & security"
+msgstr "Rete e sicurezza"
+
+msgid "Network data every (seconds)"
+msgstr "Dati di rete ogni (secondi)"
+
+msgid "Network speed, load, GPU, fans and battery"
+msgstr "Velocità di rete, carico, GPU, ventole e batteria"
+
+msgid "New device on the network: %s"
+msgstr "Nuovo dispositivo in rete: %s"
+
+msgid "New moon"
+msgstr "Luna nuova"
+
+msgid "New ransomware vulnerability"
+msgstr "Nuova vulnerabilità ransomware"
+
+msgid "Next days forecast"
+msgstr "Previsioni dei prossimi giorni"
+
+msgid "Next hours"
+msgstr "Prossime ore"
+
+msgid "No VPN"
+msgstr "Nessuna VPN"
+
+msgid "No city found"
+msgstr "Nessuna città trovata"
+
+msgid "No container is running."
+msgstr "Nessun container in esecuzione."
+
+msgid "No earthquakes ≥ M%s"
+msgstr "Nessuna scossa ≥ M%s"
+
+msgid "No failed authentication (login screen, sudo, SSH) in the journal."
+msgstr "Nessuna autenticazione fallita (schermata di accesso, sudo, SSH) nel journal."
+
+msgid "No firewall"
+msgstr "Nessun firewall"
+
+msgid "No package is waiting for an upgrade."
+msgstr "Nessun pacchetto in attesa di aggiornamento."
+
+msgid "No pollen"
+msgstr "Niente pollini"
+
+msgid "No system or user unit is in failed state."
+msgstr "Nessuna unità di sistema o utente in errore."
+
+msgid "No ufw, firewalld or nftables service found: listening ports are reachable from the local network unless the router blocks them."
+msgstr "Nessun servizio ufw, firewalld o nftables trovato: le porte in ascolto sono raggiungibili dalla rete locale, a meno che il router non le blocchi."
+
+msgid "None — search a city below"
+msgstr "Nessuna — cerca una città qui sotto"
+
+msgid "Notifications"
+msgstr "Notifiche"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "One column"
+msgstr "Una colonna"
+
+msgid "Open"
+msgstr "Aperta"
+
+msgid "Open Settings"
+msgstr "Apri Impostazioni"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Orange"
+msgstr "arancione"
+
+msgid "Orange and red weather warnings"
+msgstr "Allerte meteo arancioni e rosse"
+
+msgid "Overcast"
+msgstr "Coperto"
+
+msgid "Partly cloudy"
+msgstr "Parzialmente nuvoloso"
+
+msgid "Passwords can be brute forced: prefer keys only (PasswordAuthentication no)."
+msgstr "Le password si possono indovinare a forza bruta: meglio solo chiavi (PasswordAuthentication no)."
+
+msgid "Perfect weather for a walk"
+msgstr "Tempo perfetto per una passeggiata"
+
+msgid "Pollen %s · high"
+msgstr "Pollini %s · alti"
+
+msgid "Pollen %s · low"
+msgstr "Pollini %s · bassi"
+
+msgid "Pollen %s · moderate"
+msgstr "Pollini %s · medi"
+
+msgid "Poor air: avoid outdoor sports"
+msgstr "Aria scadente: evita lo sport all'aperto"
+
+msgid "Port %s · password authentication %s · root login %s"
+msgstr "Porta %s · autenticazione con password %s · accesso root %s"
+
+msgid "Position"
+msgstr "Posizione"
+
+msgid "Position on the desktop"
+msgstr "Posizione sul desktop"
+
+msgid "Preferences"
+msgstr "Preferenze"
+
+msgid "Primary monitor"
+msgstr "Monitor primario"
+
+msgid "Public IP changed"
+msgstr "IP pubblico cambiato"
+
+msgid "Public IP every (minutes)"
+msgstr "IP pubblico ogni (minuti)"
+
+msgid "Public IP unavailable"
+msgstr "IP pubblico non disponibile"
+
+msgid "Public IP, VPN, Wi-Fi, local address, gateway and DNS"
+msgstr "IP pubblico, VPN, Wi-Fi, indirizzo locale, gateway e DNS"
+
+msgid "Quiet night"
+msgstr "Notte tranquilla"
+
+msgid "Quiet night, min %s"
+msgstr "Notte tranquilla, minima %s"
+
+msgid "RAM"
+msgstr "RAM"
+
+msgid "Rain"
+msgstr "Pioggia"
+
+msgid "Rain in %d min · for ~%d min"
+msgstr "Pioggia tra %d min · per ~%d min"
+
+msgid "Rain in %d min · over %d min"
+msgstr "Pioggia tra %d min · oltre %d min"
+
+msgid "Rain in the next two hours"
+msgstr "Pioggia nelle prossime due ore"
+
+msgid "Raining · for more than 2 h"
+msgstr "Piove · per oltre 2 h"
+
+msgid "Raining · stops in %d min"
+msgstr "Piove · smette tra %d min"
+
+msgid "Raining: take an umbrella if you go out"
+msgstr "Piove: prendi l'ombrello se esci"
+
+msgid "Reboot required"
+msgstr "Riavvio richiesto"
+
+msgid "Reboot · new kernel"
+msgstr "Riavvio · nuovo kernel"
+
+msgid "Recent earthquakes nearby"
+msgstr "Terremoti recenti nelle vicinanze"
+
+msgid "Red"
+msgstr "rossa"
+
+msgid "Refresh"
+msgstr "Aggiornamento"
+
+msgid "Refresh every (minutes)"
+msgstr "Aggiorna ogni (minuti)"
+
+msgid "Remote sessions"
+msgstr "Sessioni remote"
+
+msgid "Required action"
+msgstr "Azione richiesta"
+
+msgid "Reset"
+msgstr "Ripristina"
+
+msgid "Restore the default settings"
+msgstr "Ripristina le impostazioni predefinite"
+
+msgid "Restore the default settings?"
+msgstr "Ripristinare le impostazioni predefinite?"
+
+msgid "Running containers"
+msgstr "Container in esecuzione"
+
+msgid "SSH server"
+msgstr "Server SSH"
+
+msgid "SSH server on"
+msgstr "Server SSH attivo"
+
+msgid "Search city"
+msgstr "Cerca città"
+
+msgid "Search failed: check your internet connection"
+msgstr "Ricerca non riuscita: controlla la connessione a Internet"
+
+msgid "Search radius (km)"
+msgstr "Raggio di ricerca (km)"
+
+msgid "Searching…"
+msgstr "Ricerca in corso…"
+
+msgid "Sections"
+msgstr "Sezioni"
+
+msgid "Secure Boot"
+msgstr "Secure Boot"
+
+msgid "Secure Boot off"
+msgstr "Secure Boot spento"
+
+msgid "Secure Boot on"
+msgstr "Secure Boot attivo"
+
+msgid "Security"
+msgstr "Sicurezza"
+
+msgid "Security fixes only take effect after a restart."
+msgstr "Le correzioni di sicurezza hanno effetto solo dopo il riavvio."
+
+msgid "Security status"
+msgstr "Stato di sicurezza"
+
+msgid "Security summary"
+msgstr "Riepilogo sicurezza"
+
+msgid "See why with: systemctl status <unit>"
+msgstr "Per il motivo: systemctl status <unità>"
+
+msgid "Selected city"
+msgstr "Città selezionata"
+
+msgid "Showers"
+msgstr "Rovesci"
+
+msgid "Shown under the computer name"
+msgstr "Mostrato sotto il nome del computer"
+
+msgid "Shows 151.43.•.• instead of the full address: handy for screenshots and screen sharing"
+msgstr "Mostra 151.43.•.• invece dell'indirizzo completo: comodo per screenshot e condivisione dello schermo"
+
+msgid "Six steps of two hours with temperature and chance of rain"
+msgstr "Sei fasce di due ore con temperatura e probabilità di pioggia"
+
+msgid "Size"
+msgstr "Dimensione"
+
+msgid "Snow"
+msgstr "Neve"
+
+msgid "Snow expected around %s"
+msgstr "Neve prevista verso le %s"
+
+msgid "Snow grains"
+msgstr "Nevischio"
+
+msgid "Snow in %d min · for ~%d min"
+msgstr "Neve tra %d min · per ~%d min"
+
+msgid "Snow in %d min · over %d min"
+msgstr "Neve tra %d min · oltre %d min"
+
+msgid "Snow showers"
+msgstr "Rovesci di neve"
+
+msgid "Snowing · for more than 2 h"
+msgstr "Nevica · per oltre 2 h"
+
+msgid "Snowing · stops in %d min"
+msgstr "Nevica · smette tra %d min"
+
+msgid "Snowing: mind the roads"
+msgstr "Nevica: attenzione alle strade"
+
+msgid "Someone is logged in from another machine. If it is not you, close the session and change the password."
+msgstr "Qualcuno è connesso da un altro computer. Se non sei tu, chiudi la sessione e cambia la password."
+
+msgid "Someone may be guessing a password: check SSH and the login screen."
+msgstr "Qualcuno potrebbe star provando le password: controlla SSH e la schermata di accesso."
+
+msgid "Sources"
+msgstr "Origini"
+
+msgid "Sources in the last 24 hours: %s"
+msgstr "Origini nelle ultime 24 ore: %s"
+
+msgid "Space weather and the ISS"
+msgstr "Meteo spaziale e ISS"
+
+msgid "Strong wind around %s (%s)"
+msgstr "Vento forte verso le %s (%s)"
+
+msgid "Style"
+msgstr "Stile"
+
+msgid "Sun arc, moon phase, sunrise and sunset"
+msgstr "Arco del sole, fase lunare, alba e tramonto"
+
+msgid "Sunset in %s"
+msgstr "Tramonto tra %s"
+
+msgid "Swap"
+msgstr "Swap"
+
+msgid "System data every (seconds)"
+msgstr "Dati di sistema ogni (secondi)"
+
+msgid "System language"
+msgstr "Lingua di sistema"
+
+msgid "System location services"
+msgstr "Servizi di localizzazione di sistema"
+
+msgid "System up to date"
+msgstr "Sistema aggiornato"
+
+msgid "TCP ports open to the network are listed explicitly"
+msgstr "Le porte TCP aperte verso la rete vengono elencate esplicitamente"
+
+msgid "Terminal (amber phosphor)"
+msgstr "Terminale (fosfori ambra)"
+
+msgid "Terminal (green phosphor)"
+msgstr "Terminale (fosfori verdi)"
+
+msgid "The SSH server accepts remote logins on this machine."
+msgstr "Il server SSH accetta accessi remoti su questo computer."
+
+msgid "The VPN dropped: your traffic is no longer going through it."
+msgstr "La VPN è caduta: il traffico non è più protetto dal tunnel."
+
+msgid "The card is tinted like the sky: day, dusk, night with stars, rain and snow"
+msgstr "La scheda prende il colore del cielo: giorno, tramonto, notte con le stelle, pioggia e neve"
+
+msgid "The firmware only runs signed bootloaders and kernels, so a bootkit cannot replace them unnoticed."
+msgstr "Il firmware avvia solo bootloader e kernel firmati: un bootkit non può sostituirli senza farsi notare."
+
+msgid "The firmware runs unsigned boot code: malware with root could replace the bootloader. It can be enabled in the UEFI setup if the system supports it."
+msgstr "Il firmware avvia codice non firmato: un malware con privilegi di root potrebbe sostituire il bootloader. Si può attivare nel setup UEFI, se il sistema lo supporta."
+
+msgid "The root file system is not on a LUKS volume: anyone who gets hold of the disk can read every file."
+msgstr "Il file system di root non è su un volume LUKS: chiunque entri in possesso del disco può leggere tutti i file."
+
+msgid "The root file system sits on a LUKS volume: without the passphrase the data is unreadable if the disk is lost or stolen."
+msgstr "Il file system di root è su un volume LUKS: senza la passphrase i dati sono illeggibili se il disco viene perso o rubato."
+
+msgid "The system asked for a reboot after the last updates."
+msgstr "Il sistema ha richiesto un riavvio dopo gli ultimi aggiornamenti."
+
+msgid "The widget goes back to its initial appearance, position and content. This cannot be undone."
+msgstr "Il widget torna all'aspetto, alla posizione e ai contenuti iniziali. L'operazione non si può annullare."
+
+msgid "The widget moves back to the primary monitor while the chosen one is unplugged"
+msgstr "Se il monitor scelto è scollegato il widget torna su quello primario"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Thunderstorm"
+msgstr "Temporale"
+
+msgid "Thunderstorm with hail"
+msgstr "Temporale con grandine"
+
+msgid "Thunderstorm: stay indoors if you can"
+msgstr "Temporale: resta al coperto se puoi"
+
+msgid "Thunderstorms expected around %s"
+msgstr "Temporali previsti verso le %s"
+
+msgid "Tip of the day"
+msgstr "Consiglio del giorno"
+
+msgid "Top center"
+msgstr "In alto al centro"
+
+msgid "Top left"
+msgstr "In alto a sinistra"
+
+msgid "Top processes by CPU and memory"
+msgstr "Processi che usano più CPU e memoria"
+
+msgid "Top right"
+msgstr "In alto a destra"
+
+msgid "Two columns: weather on the left, system on the right"
+msgstr "Due colonne: meteo a sinistra, sistema a destra"
+
+msgid "UTC clock and Unix time"
+msgstr "Orologio UTC e tempo Unix"
+
+msgid "UV %d · extreme"
+msgstr "UV %d · estremo"
+
+msgid "UV %d · high"
+msgstr "UV %d · alto"
+
+msgid "UV %d · low"
+msgstr "UV %d · basso"
+
+msgid "UV %d · moderate"
+msgstr "UV %d · moderato"
+
+msgid "UV %d · very high"
+msgstr "UV %d · molto alto"
+
+msgid "Umbrella: rain likely from %s"
+msgstr "Porta l'ombrello: pioggia probabile dalle %s"
+
+msgid "Units"
+msgstr "Unità di misura"
+
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+msgid "Up to date"
+msgstr "Aggiornato"
+
+msgid "Update failed, retrying…"
+msgstr "Aggiornamento non riuscito, nuovo tentativo…"
+
+msgid "Updated %s"
+msgstr "Aggiornato alle %s"
+
+msgid "Updated %s · %s"
+msgstr "Aggiornato alle %s · %s"
+
+msgid "Updated packages: %s"
+msgstr "Pacchetti aggiornati: %s"
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Used in known ransomware campaigns."
+msgstr "Usata in campagne ransomware note."
+
+msgid "VPN disconnected"
+msgstr "VPN disconnessa"
+
+msgid "VPN dropped"
+msgstr "VPN caduta"
+
+msgid "VRAM"
+msgstr "VRAM"
+
+msgid "VRAM · %d%%"
+msgstr "VRAM · %d%%"
+
+msgid "Violent showers"
+msgstr "Rovesci violenti"
+
+msgid "Waning crescent"
+msgstr "Luna calante"
+
+msgid "Waning gibbous"
+msgstr "Gibbosa calante"
+
+msgid "Warns when the VPN drops or the public IP changes"
+msgstr "Avvisa quando la VPN cade o l'IP pubblico cambia"
+
+msgid "Waxing crescent"
+msgstr "Luna crescente"
+
+msgid "Waxing gibbous"
+msgstr "Gibbosa crescente"
+
+msgid "Weather"
+msgstr "Meteo"
+
+msgid "Weather data by Open-Meteo.com. Automatic location uses the system location services (GeoClue) when they are enabled, otherwise it is estimated from your public IP address."
+msgstr "Dati meteo di Open-Meteo.com. La posizione automatica usa i servizi di localizzazione di sistema (GeoClue) quando sono attivi, altrimenti viene stimata dall'indirizzo IP pubblico."
+
+msgid "Weather unavailable, retrying…"
+msgstr "Meteo non disponibile, nuovo tentativo…"
+
+msgid "Weather warning"
+msgstr "Allerta meteo"
+
+msgid "Weather warnings"
+msgstr "Allerte meteo"
+
+msgid "When CISA adds a vulnerability known to be used in ransomware campaigns to the KEV catalogue"
+msgstr "Quando CISA aggiunge al catalogo KEV una vulnerabilità usata in campagne ransomware"
+
+msgid "When an active VPN connection goes away"
+msgstr "Quando una connessione VPN attiva cade"
+
+msgid "When five or more logins fail between two security checks"
+msgstr "Quando cinque o più accessi falliscono tra due controlli di sicurezza"
+
+msgid "When the national weather service issues a severe warning for your region"
+msgstr "Quando il servizio meteorologico nazionale emette un'allerta grave per la tua regione"
+
+msgid "Wind %s"
+msgstr "Vento %s"
+
+msgid "Yellow"
+msgstr "gialla"
+
+msgid "alder"
+msgstr "ontano"
+
+msgid "avalanches"
+msgstr "valanghe"
+
+msgid "avg %d"
+msgstr "media %d"
+
+msgid "birch"
+msgstr "betulla"
+
+msgid "coastal event"
+msgstr "mareggiate"
+
+msgid "cold"
+msgstr "freddo"
+
+msgid "due %s"
+msgstr "scadenza %s"
+
+msgid "flooding"
+msgstr "alluvioni"
+
+msgid "fog"
+msgstr "nebbia"
+
+msgid "forest fire"
+msgstr "incendi boschivi"
+
+msgid "from %s"
+msgstr "dalle %s"
+
+msgid "full moon in %d d"
+msgstr "luna piena tra %d g"
+
+msgid "gateway"
+msgstr "gateway"
+
+msgid "grass"
+msgstr "graminacee"
+
+msgid "heat"
+msgstr "caldo"
+
+msgid "ice"
+msgstr "ghiaccio"
+
+msgid "idle"
+msgstr "inattivo"
+
+msgid "just now"
+msgstr "adesso"
+
+msgid "max %d"
+msgstr "max %d"
+
+msgid "mugwort"
+msgstr "artemisia"
+
+msgid "new moon in %d d"
+msgstr "luna nuova tra %d g"
+
+msgid "no"
+msgstr "no"
+
+msgid "olive"
+msgstr "olivo"
+
+msgid "quiet"
+msgstr "calmo"
+
+msgid "ragweed"
+msgstr "ambrosia"
+
+msgid "rain"
+msgstr "pioggia"
+
+msgid "rain and flooding"
+msgstr "pioggia e alluvioni"
+
+msgid "ransomware"
+msgstr "ransomware"
+
+msgid "security"
+msgstr "sicurezza"
+
+msgid "since %s"
+msgstr "dal %s"
+
+msgid "snow"
+msgstr "neve"
+
+msgid "snow and ice"
+msgstr "neve e ghiaccio"
+
+msgid "system location"
+msgstr "posizione di sistema"
+
+msgid "systemd OK"
+msgstr "systemd ok"
+
+msgid "thunderstorms"
+msgstr "temporali"
+
+msgid "today"
+msgstr "oggi"
+
+msgid "unsettled"
+msgstr "instabile"
+
+msgid "until %s"
+msgstr "fino alle %s"
+
+msgid "up %s"
+msgstr "attivo da %s"
+
+msgid "user"
+msgstr "utente"
+
+msgid "wind"
+msgstr "vento"
+
+msgid "yes"
+msgstr "sì"
+
+msgid "%d connection"
+msgid_plural "%d connections"
+msgstr[0] "%d connessione"
+msgstr[1] "%d connessioni"
+
+msgid "%d device on the local network"
+msgid_plural "%d devices on the local network"
+msgstr[0] "%d dispositivo nella rete locale"
+msgstr[1] "%d dispositivi nella rete locale"
+
+msgid "%d exposed"
+msgid_plural "%d exposed"
+msgstr[0] "%d esposta"
+msgstr[1] "%d esposte"
+
+msgid "%d failed login in the last 24 hours"
+msgid_plural "%d failed logins in the last 24 hours"
+msgstr[0] "%d accesso fallito nelle ultime 24 ore"
+msgstr[1] "%d accessi falliti nelle ultime 24 ore"
+
+msgid "%d failed login · 24 h"
+msgid_plural "%d failed logins · 24 h"
+msgstr[0] "%d accesso fallito · 24 h"
+msgstr[1] "%d accessi falliti · 24 h"
+
+msgid "%d failed unit"
+msgid_plural "%d failed units"
+msgstr[0] "%d unità in errore"
+msgstr[1] "%d unità in errore"
+
+msgid "%d new failed login since the last check"
+msgid_plural "%d new failed logins since the last check"
+msgstr[0] "%d nuovo accesso fallito dall'ultimo controllo"
+msgstr[1] "%d nuovi accessi falliti dall'ultimo controllo"
+
+msgid "%d new this week"
+msgid_plural "%d new this week"
+msgstr[0] "%d nuova questa settimana"
+msgstr[1] "%d nuove questa settimana"
+
+msgid "%d new vulnerability exploited by ransomware"
+msgid_plural "%d new vulnerabilities exploited by ransomware"
+msgstr[0] "%d nuova vulnerabilità sfruttata da ransomware"
+msgstr[1] "%d nuove vulnerabilità sfruttate da ransomware"
+
+msgid "%d package can be upgraded."
+msgid_plural "%d packages can be upgraded."
+msgstr[0] "%d pacchetto può essere aggiornato."
+msgstr[1] "%d pacchetti possono essere aggiornati."
+
+msgid "%d remote session: %s"
+msgid_plural "%d remote sessions: %s"
+msgstr[0] "%d sessione remota: %s"
+msgstr[1] "%d sessioni remote: %s"
+
+msgid "%d systemd unit in failed state"
+msgid_plural "%d systemd units in failed state"
+msgstr[0] "%d unità systemd in stato di errore"
+msgstr[1] "%d unità systemd in stato di errore"
+
+msgid "%d update"
+msgid_plural "%d updates"
+msgstr[0] "%d aggiornamento"
+msgstr[1] "%d aggiornamenti"
+
+msgid "%d update pending"
+msgid_plural "%d updates pending"
+msgstr[0] "%d aggiornamento in sospeso"
+msgstr[1] "%d aggiornamenti in sospeso"
+
+msgid "%d warning"
+msgid_plural "%d warnings"
+msgstr[0] "%d avviso"
+msgstr[1] "%d avvisi"
+
+msgid "%d weather warning"
+msgid_plural "%d weather warnings"
+msgstr[0] "%d allerta meteo"
+msgstr[1] "%d allerte meteo"
+
+msgid "+%d more"
+msgid_plural "+%d more"
+msgstr[0] "+%d altro"
+msgstr[1] "+%d altri"
+
+msgid "to %d host"
+msgid_plural "to %d hosts"
+msgstr[0] "verso %d host"
+msgstr[1] "verso %d host"

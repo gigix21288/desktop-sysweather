@@ -1,0 +1,837 @@
+/* Desktop System & Weather Widget
+ * Sizes are in em so the whole card scales with the "size" preference.
+ * background-color and font-size are set inline from the preferences. */
+
+.sysweather-widget {
+    width: 23.5em;
+    border-radius: 1.4em;
+    border-width: 1px;
+    font-weight: normal;
+}
+
+/* The sky is painted by a drawing area behind this box. */
+.sw-content {
+    padding: 1.1em 1.25em 1em;
+}
+
+/* ---------- themes ---------- */
+
+.sw-dark {
+    color: #eef1f8;
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    -sw-track: rgba(255, 255, 255, 0.13);
+    -sw-line: #7dd3fc;
+    -sw-ok-start: #2dd4bf;
+    -sw-ok-end: #60a5fa;
+    -sw-warn-start: #fbbf24;
+    -sw-warn-end: #fb923c;
+    -sw-crit-start: #fb7185;
+    -sw-crit-end: #ef4444;
+    -sw-sun: #fbbf24;
+    -sw-moon: #e2e8f0;
+    -sw-moon-dark: #3b4256;
+    -sw-rain: #38bdf8;
+}
+
+.sw-light {
+    color: #141a28;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    -sw-track: rgba(20, 30, 60, 0.14);
+    -sw-line: #2563eb;
+    -sw-ok-start: #0d9488;
+    -sw-ok-end: #2563eb;
+    -sw-warn-start: #d97706;
+    -sw-warn-end: #ea580c;
+    -sw-crit-start: #e11d48;
+    -sw-crit-end: #b91c1c;
+    -sw-sun: #f59e0b;
+    -sw-moon: #475569;
+    -sw-moon-dark: #cbd5e1;
+    -sw-rain: #0284c7;
+}
+
+.sw-dark .sw-subtitle, .sw-dark .sw-uptime, .sw-dark .sw-condition,
+.sw-dark .sw-range, .sw-dark .sw-status, .sw-dark .sw-day-name,
+.sw-dark .sw-day-min, .sw-dark .sw-meter-value, .sw-dark .sw-tile-caption,
+.sw-dark .sw-sun-time, .sw-dark .sw-sun-center, .sw-dark .sw-sun-icon,
+.sw-dark .sw-advice-icon, .sw-dark .sw-quake-text {
+    color: rgba(238, 241, 248, 0.66);
+}
+
+.sw-light .sw-subtitle, .sw-light .sw-uptime, .sw-light .sw-condition,
+.sw-light .sw-range, .sw-light .sw-status, .sw-light .sw-day-name,
+.sw-light .sw-day-min, .sw-light .sw-meter-value, .sw-light .sw-tile-caption,
+.sw-light .sw-sun-time, .sw-light .sw-sun-center, .sw-light .sw-sun-icon,
+.sw-light .sw-advice-icon, .sw-light .sw-quake-text {
+    color: rgba(20, 26, 40, 0.8);
+}
+
+.sw-dark .sw-chip, .sw-dark .sw-tile {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.sw-light .sw-chip, .sw-light .sw-tile {
+    background-color: rgba(20, 30, 60, 0.08);
+}
+
+.sw-dark .sw-section {
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+.sw-light .sw-section {
+    border-color: rgba(20, 30, 60, 0.10);
+}
+
+/* ---------- header ---------- */
+
+.sw-header {
+    padding-bottom: 0.15em;
+}
+
+.sw-host {
+    font-size: 1.15em;
+    font-weight: bold;
+}
+
+.sw-uptime, .sw-subtitle {
+    font-size: 0.85em;
+}
+
+/* ---------- settings gear ---------- */
+
+.sw-gear-mark {
+    icon-size: 1.05em;
+    margin-left: 0.7em;
+}
+
+.sw-dark .sw-gear-mark { color: rgba(238, 241, 248, 0.45); }
+.sw-light .sw-gear-mark { color: rgba(20, 26, 40, 0.55); }
+
+/* The clickable button lives above the windows and is shown only while the
+ * pointer is over the card; it is drawn exactly over .sw-gear-mark. */
+.sw-gear {
+    padding: 0.35em;
+    border-radius: 1.2em;
+    transition-duration: 120ms;
+}
+
+.sw-gear .sw-gear-icon {
+    icon-size: 1.05em;
+}
+
+.sw-gear.sw-dark {
+    color: #eef1f8;
+    background-color: rgba(255, 255, 255, 0.10);
+}
+
+.sw-gear.sw-dark:hover {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+.sw-gear.sw-dark:active {
+    background-color: rgba(255, 255, 255, 0.32);
+}
+
+.sw-gear.sw-light {
+    color: #1b2232;
+    background-color: rgba(20, 30, 60, 0.10);
+}
+
+.sw-gear.sw-light:hover {
+    background-color: rgba(20, 30, 60, 0.20);
+}
+
+.sw-gear.sw-light:active {
+    background-color: rgba(20, 30, 60, 0.30);
+}
+
+/* ---------- hover details ---------- */
+
+/* The popup with the details of a security chip or a feed row: a top chrome
+ * actor like the gear, nearly opaque so it stays readable over any wallpaper. */
+.sw-popup {
+    max-width: 26em;
+    padding: 0.7em 0.9em;
+    border-radius: 0.8em;
+    border-width: 1px;
+}
+
+.sw-popup-title {
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+}
+
+.sw-popup-body {
+    font-size: 0.82em;
+}
+
+.sw-popup-hint {
+    font-size: 0.72em;
+    margin-top: 0.45em;
+}
+
+.sw-popup.sw-dark {
+    color: #eef1f8;
+    background-color: rgba(14, 17, 27, 0.96);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+}
+
+.sw-popup.sw-dark .sw-popup-hint { color: rgba(238, 241, 248, 0.6); }
+
+.sw-popup.sw-light {
+    color: #141a28;
+    background-color: rgba(250, 251, 254, 0.97);
+    border-color: rgba(20, 30, 60, 0.14);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
+}
+
+.sw-popup.sw-light .sw-popup-hint { color: rgba(20, 26, 40, 0.65); }
+
+/* The translucent highlight drawn over the hovered chip. */
+.sw-hotspot {
+    border-radius: 1em;
+    background-color: rgba(255, 255, 255, 0.09);
+}
+
+.sw-hotspot.sw-light { background-color: rgba(20, 30, 60, 0.09); }
+.sw-hotspot.sw-link { background-color: rgba(125, 211, 252, 0.16); }
+.sw-hotspot.sw-light.sw-link { background-color: rgba(37, 99, 235, 0.14); }
+.sw-hotspot.sw-link:hover { background-color: rgba(125, 211, 252, 0.26); }
+.sw-hotspot.sw-light.sw-link:hover { background-color: rgba(37, 99, 235, 0.22); }
+
+/* ---------- sections ---------- */
+
+.sw-section {
+    margin-top: 0.85em;
+    padding-top: 0.85em;
+    border-top-width: 1px;
+}
+
+/* ---------- weather ---------- */
+
+.sw-weather-icon {
+    icon-size: 3.4em;
+    margin-right: 0.55em;
+}
+
+.sw-temperature {
+    font-size: 3em;
+    font-weight: 300;
+}
+
+.sw-city {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.sw-condition, .sw-range {
+    font-size: 0.88em;
+}
+
+.sw-kind-sun { color: #fbbf24; }
+.sw-kind-moon { color: #c4b5fd; }
+.sw-kind-cloud { color: #94a3b8; }
+.sw-kind-rain { color: #38bdf8; }
+.sw-kind-snow { color: #bae6fd; }
+.sw-kind-storm { color: #a78bfa; }
+
+.sw-light .sw-kind-sun { color: #f59e0b; }
+.sw-light .sw-kind-moon { color: #7c3aed; }
+.sw-light .sw-kind-cloud { color: #64748b; }
+.sw-light .sw-kind-rain { color: #0284c7; }
+.sw-light .sw-kind-snow { color: #0ea5e9; }
+.sw-light .sw-kind-storm { color: #7c3aed; }
+
+.sw-chips {
+    margin-top: 0.7em;
+}
+
+.sw-chip {
+    font-size: 0.8em;
+    padding: 0.3em 0.7em;
+    border-radius: 1em;
+}
+
+/* the next hours strip */
+.sw-hourly {
+    margin-top: 0.8em;
+}
+
+.sw-hour-time {
+    font-size: 0.78em;
+}
+
+.sw-hour-icon {
+    icon-size: 1.3em;
+    margin: 0.25em 0;
+}
+
+.sw-hour-temp {
+    font-size: 0.85em;
+    font-weight: bold;
+}
+
+/* chance of rain under an hour or a day */
+.sw-hour-prob, .sw-day-prob {
+    font-size: 0.72em;
+}
+
+.sw-day-prob {
+    margin-top: 0.15em;
+}
+
+.sw-dark .sw-hour-prob, .sw-dark .sw-day-prob { color: #38bdf8; }
+.sw-light .sw-hour-prob, .sw-light .sw-day-prob { color: #0284c7; }
+
+.sw-forecast {
+    margin-top: 0.8em;
+}
+
+.sw-day-name {
+    font-size: 0.82em;
+}
+
+.sw-day-icon {
+    icon-size: 1.6em;
+    margin: 0.3em 0;
+}
+
+.sw-day-max {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right: 0.35em;
+}
+
+.sw-day-min {
+    font-size: 0.9em;
+}
+
+.sw-status {
+    font-size: 0.72em;
+    margin-top: 0.5em;
+}
+
+/* ---------- location ---------- */
+
+.sw-location-icon {
+    icon-size: 0.85em;
+    margin-right: 0.3em;
+    color: #38bdf8;
+}
+
+.sw-light .sw-location-icon { color: #0284c7; }
+
+/* ---------- rain in the next two hours ---------- */
+
+.sw-rain-row {
+    margin-top: 0.65em;
+}
+
+.sw-rain-icon {
+    icon-size: 1.3em;
+    margin-right: 0.5em;
+}
+
+.sw-rain-text {
+    font-size: 0.85em;
+}
+
+.sw-rain-bars {
+    width: 5.2em;
+    height: 1.2em;
+    margin-left: 0.7em;
+}
+
+/* ---------- sun arc, moon, sunrise and sunset ---------- */
+
+.sw-sun {
+    margin-top: 0.65em;
+}
+
+.sw-sun-arc {
+    height: 2.7em;
+}
+
+.sw-sun-row {
+    margin-top: 0.1em;
+}
+
+.sw-sun-icon {
+    icon-size: 1em;
+    margin: 0 0.3em;
+}
+
+.sw-sun-time, .sw-sun-center {
+    font-size: 0.8em;
+}
+
+/* ---------- air quality, UV and pollen ---------- */
+
+.sw-air {
+    margin-top: 0.6em;
+}
+
+.sw-pollen {
+    margin-top: 0.4em;
+}
+
+.sw-chip.sw-level-good { background-color: rgba(45, 212, 191, 0.22); }
+.sw-chip.sw-level-fair { background-color: rgba(132, 204, 22, 0.24); }
+.sw-chip.sw-level-moderate { background-color: rgba(251, 191, 36, 0.28); }
+.sw-chip.sw-level-poor { background-color: rgba(251, 146, 60, 0.34); }
+.sw-chip.sw-level-very-poor { background-color: rgba(251, 113, 133, 0.36); }
+.sw-chip.sw-level-hazardous { background-color: rgba(167, 139, 250, 0.4); }
+
+/* ---------- tip of the day ---------- */
+
+.sw-advice {
+    margin-top: 0.7em;
+}
+
+.sw-advice-icon {
+    icon-size: 1em;
+    margin-right: 0.45em;
+}
+
+.sw-advice-text {
+    font-size: 0.85em;
+    font-style: italic;
+}
+
+/* ---------- earthquakes ---------- */
+
+.sw-quakes {
+    margin-top: 0.8em;
+}
+
+.sw-quake-row {
+    margin-top: 0.25em;
+}
+
+.sw-mag {
+    font-size: 0.78em;
+    font-weight: bold;
+    padding: 0.15em 0.6em;
+    border-radius: 1em;
+    margin-right: 0.6em;
+    color: #0b1220;
+    text-shadow: none;
+}
+
+.sw-mag.sw-ok { background-color: #94a3b8; }
+.sw-mag.sw-warn { background-color: #fbbf24; }
+.sw-mag.sw-crit { background-color: #fb7185; }
+
+.sw-quake-text {
+    font-size: 0.85em;
+}
+
+/* ---------- system ---------- */
+
+.sw-meter-title {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.sw-cpu-value {
+    font-size: 1.25em;
+    font-weight: bold;
+    min-width: 2.6em;
+    text-align: right;
+}
+
+.sw-temp-chip {
+    font-size: 0.78em;
+    font-weight: bold;
+    padding: 0.15em 0.6em;
+    border-radius: 1em;
+    margin-right: 0.6em;
+    color: #0b1220;
+    text-shadow: none;
+}
+
+.sw-temp-chip.sw-ok { background-color: #5eead4; }
+.sw-temp-chip.sw-warn { background-color: #fbbf24; }
+.sw-temp-chip.sw-crit { background-color: #fb7185; }
+
+.sw-sparkline {
+    height: 2.6em;
+    margin-top: 0.35em;
+    margin-bottom: 0.2em;
+}
+
+.sw-meter {
+    margin-top: 0.55em;
+}
+
+.sw-meter-value {
+    font-size: 0.8em;
+}
+
+.sw-meter-percent {
+    font-size: 0.85em;
+    font-weight: bold;
+    min-width: 2.8em;
+    text-align: right;
+}
+
+.sw-bar {
+    height: 0.42em;
+    margin-top: 0.3em;
+}
+
+/* ---------- detail tiles ---------- */
+
+.sw-tile {
+    padding: 0.4em 0.6em;
+    border-radius: 0.7em;
+    margin: 0.2em;
+}
+
+.sw-tile-caption {
+    font-size: 0.72em;
+}
+
+.sw-tile-value {
+    font-size: 0.92em;
+    font-weight: bold;
+}
+
+/* ---------- header clock ---------- */
+
+.sw-clock {
+    font-size: 0.78em;
+    font-family: JetBrains Mono, Fira Code, DejaVu Sans Mono, monospace;
+    margin-top: 0.1em;
+}
+
+/* ---------- section headings (network, security, feeds) ---------- */
+
+.sw-section-head {
+    margin-bottom: 0.35em;
+}
+
+.sw-section-icon {
+    icon-size: 1em;
+    margin-right: 0.45em;
+}
+
+.sw-section-title {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.sw-net-text, .sw-feed-text {
+    font-size: 0.82em;
+}
+
+/* a chip with a neutral level */
+.sw-chip.sw-level-none { }
+
+/* ---------- network ---------- */
+
+.sw-ip-row {
+    margin-top: 0.1em;
+}
+
+.sw-ip {
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: JetBrains Mono, Fira Code, DejaVu Sans Mono, monospace;
+}
+
+.sw-ip-org {
+    margin-left: 0.6em;
+}
+
+.sw-chip.sw-alert {
+    margin-top: 0.5em;
+    font-weight: bold;
+}
+
+/* weather warnings (MeteoAlarm) */
+.sw-warnings {
+    margin-top: 0.55em;
+}
+
+.sw-chip.sw-warning {
+    font-weight: bold;
+}
+
+.sw-lan-row {
+    margin-top: 0.45em;
+}
+
+.sw-link-row {
+    margin-top: 0.55em;
+}
+
+.sw-chip.sw-signal {
+    margin-left: 0.35em;
+    font-weight: bold;
+}
+
+.sw-net-tiles {
+    margin-top: 0.3em;
+}
+
+.sw-net-tiles .sw-tile-value {
+    font-family: JetBrains Mono, Fira Code, DejaVu Sans Mono, monospace;
+    font-size: 0.82em;
+}
+
+.sw-ports {
+    margin-top: 0.5em;
+}
+
+.sw-chip.sw-exposed {
+    margin-top: 0.35em;
+    font-weight: bold;
+}
+
+.sw-latency-row {
+    margin-top: 0.5em;
+}
+
+.sw-latency-spark {
+    width: 5.5em;
+    height: 1.5em;
+    margin: 0 0.7em 0 0;
+}
+
+/* ---------- security ---------- */
+
+.sw-flow {
+    margin-top: 0.1em;
+}
+
+.sw-chip.sw-flow-chip {
+    margin: 0.15em;
+}
+
+.sw-processes {
+    margin-top: 0.5em;
+}
+
+.sw-proc-caption {
+    font-size: 0.75em;
+    font-weight: bold;
+    min-width: 2.6em;
+    margin-top: 0.15em;
+}
+
+/* ---------- feeds ---------- */
+
+.sw-cert {
+    margin-top: 0.7em;
+}
+
+.sw-feed-row {
+    margin-top: 0.3em;
+}
+
+.sw-cve {
+    font-family: JetBrains Mono, Fira Code, DejaVu Sans Mono, monospace;
+    font-size: 0.74em;
+    font-weight: bold;
+    padding: 0.15em 0.5em;
+    border-radius: 0.5em;
+    margin-right: 0.6em;
+    color: #0b1220;
+    text-shadow: none;
+}
+
+.sw-cve.sw-ok { background-color: #94a3b8; }
+.sw-cve.sw-warn { background-color: #fbbf24; }
+.sw-cve.sw-crit { background-color: #fb7185; }
+
+.sw-cert-text {
+    font-style: italic;
+}
+
+/* ---------- two columns ---------- */
+
+.sysweather-widget.sw-double {
+    width: 48em;
+}
+
+.sw-column-right {
+    margin-left: 1.25em;
+    padding-left: 1.25em;
+    border-left-width: 1px;
+}
+
+.sw-dark .sw-column-right { border-color: rgba(255, 255, 255, 0.10); }
+.sw-light .sw-column-right { border-color: rgba(20, 30, 60, 0.10); }
+
+.sw-section.sw-first {
+    margin-top: 0;
+    padding-top: 0;
+    border-top-width: 0;
+}
+
+.sw-double .sw-column-left .sw-section.sw-first {
+    margin-top: 0.85em;
+    padding-top: 0.85em;
+    border-top-width: 1px;
+}
+
+/* ---------- terminal themes ---------- */
+
+.sw-terminal, .sw-amber {
+    font-family: JetBrains Mono, Fira Code, Cascadia Code, DejaVu Sans Mono, monospace;
+    border-radius: 0.6em;
+}
+
+.sw-terminal {
+    color: #a8ffb0;
+    border-color: rgba(57, 255, 20, 0.35);
+    box-shadow: 0 0 22px rgba(57, 255, 20, 0.16);
+    text-shadow: 0 0 6px rgba(57, 255, 20, 0.35);
+    -sw-track: rgba(57, 255, 20, 0.14);
+    -sw-line: #39ff14;
+    -sw-ok-start: #1fbf4f;
+    -sw-ok-end: #39ff14;
+    -sw-warn-start: #d4c21a;
+    -sw-warn-end: #ffe76a;
+    -sw-crit-start: #ff5c5c;
+    -sw-crit-end: #ff2a2a;
+    -sw-sun: #e6ff6a;
+    -sw-moon: #c8ffc8;
+    -sw-moon-dark: #0f2a12;
+    -sw-rain: #39ff14;
+}
+
+.sw-amber {
+    color: #ffcf7a;
+    border-color: rgba(255, 176, 0, 0.35);
+    box-shadow: 0 0 22px rgba(255, 176, 0, 0.16);
+    text-shadow: 0 0 6px rgba(255, 176, 0, 0.35);
+    -sw-track: rgba(255, 176, 0, 0.14);
+    -sw-line: #ffb000;
+    -sw-ok-start: #c98a00;
+    -sw-ok-end: #ffb000;
+    -sw-warn-start: #ff8c1a;
+    -sw-warn-end: #ffd166;
+    -sw-crit-start: #ff5c5c;
+    -sw-crit-end: #ff2a2a;
+    -sw-sun: #ffd166;
+    -sw-moon: #ffe0a0;
+    -sw-moon-dark: #2a1a05;
+    -sw-rain: #ffb000;
+}
+
+.sw-terminal .sw-subtitle, .sw-terminal .sw-uptime, .sw-terminal .sw-condition,
+.sw-terminal .sw-range, .sw-terminal .sw-status, .sw-terminal .sw-day-name,
+.sw-terminal .sw-day-min, .sw-terminal .sw-meter-value, .sw-terminal .sw-tile-caption,
+.sw-terminal .sw-sun-time, .sw-terminal .sw-sun-center, .sw-terminal .sw-sun-icon,
+.sw-terminal .sw-advice-icon, .sw-terminal .sw-quake-text, .sw-terminal .sw-clock,
+.sw-terminal .sw-net-text, .sw-terminal .sw-feed-text {
+    color: rgba(168, 255, 176, 0.66);
+}
+
+.sw-amber .sw-subtitle, .sw-amber .sw-uptime, .sw-amber .sw-condition,
+.sw-amber .sw-range, .sw-amber .sw-status, .sw-amber .sw-day-name,
+.sw-amber .sw-day-min, .sw-amber .sw-meter-value, .sw-amber .sw-tile-caption,
+.sw-amber .sw-sun-time, .sw-amber .sw-sun-center, .sw-amber .sw-sun-icon,
+.sw-amber .sw-advice-icon, .sw-amber .sw-quake-text, .sw-amber .sw-clock,
+.sw-amber .sw-net-text, .sw-amber .sw-feed-text {
+    color: rgba(255, 207, 122, 0.66);
+}
+
+.sw-terminal .sw-chip, .sw-terminal .sw-tile {
+    background-color: rgba(57, 255, 20, 0.06);
+    border: 1px solid rgba(57, 255, 20, 0.22);
+    border-radius: 0.3em;
+}
+
+.sw-amber .sw-chip, .sw-amber .sw-tile {
+    background-color: rgba(255, 176, 0, 0.06);
+    border: 1px solid rgba(255, 176, 0, 0.22);
+    border-radius: 0.3em;
+}
+
+.sw-terminal .sw-section, .sw-terminal .sw-column-right { border-color: rgba(57, 255, 20, 0.22); }
+.sw-amber .sw-section, .sw-amber .sw-column-right { border-color: rgba(255, 176, 0, 0.22); }
+
+.sw-terminal .sw-gear-mark { color: rgba(168, 255, 176, 0.5); }
+.sw-amber .sw-gear-mark { color: rgba(255, 207, 122, 0.5); }
+
+/* monochrome weather icons on the phosphor themes */
+.sw-terminal .sw-kind-sun, .sw-terminal .sw-kind-moon, .sw-terminal .sw-kind-cloud,
+.sw-terminal .sw-kind-rain, .sw-terminal .sw-kind-snow, .sw-terminal .sw-kind-storm,
+.sw-terminal .sw-location-icon {
+    color: #a8ffb0;
+}
+
+.sw-amber .sw-kind-sun, .sw-amber .sw-kind-moon, .sw-amber .sw-kind-cloud,
+.sw-amber .sw-kind-rain, .sw-amber .sw-kind-snow, .sw-amber .sw-kind-storm,
+.sw-amber .sw-location-icon {
+    color: #ffcf7a;
+}
+
+.sw-terminal .sw-chip.sw-level-good { background-color: rgba(57, 255, 20, 0.2); }
+.sw-terminal .sw-chip.sw-level-fair { background-color: rgba(190, 255, 20, 0.2); }
+.sw-terminal .sw-chip.sw-level-moderate { background-color: rgba(255, 231, 106, 0.26); }
+.sw-terminal .sw-chip.sw-level-poor { background-color: rgba(255, 140, 26, 0.3); }
+.sw-terminal .sw-chip.sw-level-very-poor { background-color: rgba(255, 42, 42, 0.34); }
+.sw-terminal .sw-chip.sw-level-hazardous { background-color: rgba(255, 42, 42, 0.45); }
+
+.sw-amber .sw-chip.sw-level-good { background-color: rgba(255, 176, 0, 0.2); }
+.sw-amber .sw-chip.sw-level-fair { background-color: rgba(255, 200, 60, 0.2); }
+.sw-amber .sw-chip.sw-level-moderate { background-color: rgba(255, 140, 26, 0.26); }
+.sw-amber .sw-chip.sw-level-poor { background-color: rgba(255, 100, 26, 0.3); }
+.sw-amber .sw-chip.sw-level-very-poor { background-color: rgba(255, 42, 42, 0.34); }
+.sw-amber .sw-chip.sw-level-hazardous { background-color: rgba(255, 42, 42, 0.45); }
+
+/* the settings button over the phosphor themes */
+.sw-gear.sw-terminal { color: #a8ffb0; background-color: rgba(57, 255, 20, 0.12); }
+.sw-gear.sw-terminal:hover { background-color: rgba(57, 255, 20, 0.26); }
+.sw-gear.sw-amber { color: #ffcf7a; background-color: rgba(255, 176, 0, 0.12); }
+.sw-gear.sw-amber:hover { background-color: rgba(255, 176, 0, 0.26); }
+
+/* the hover popup over the phosphor themes */
+.sw-popup.sw-terminal, .sw-popup.sw-amber {
+    font-family: JetBrains Mono, Fira Code, Cascadia Code, DejaVu Sans Mono, monospace;
+    border-radius: 0.4em;
+}
+
+.sw-popup.sw-terminal {
+    color: #a8ffb0;
+    background-color: rgba(4, 10, 6, 0.97);
+    border-color: rgba(57, 255, 20, 0.4);
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.2);
+    text-shadow: 0 0 6px rgba(57, 255, 20, 0.35);
+}
+
+.sw-popup.sw-amber {
+    color: #ffcf7a;
+    background-color: rgba(12, 8, 2, 0.97);
+    border-color: rgba(255, 176, 0, 0.4);
+    box-shadow: 0 0 18px rgba(255, 176, 0, 0.2);
+    text-shadow: 0 0 6px rgba(255, 176, 0, 0.35);
+}
+
+.sw-popup.sw-terminal .sw-popup-hint { color: rgba(168, 255, 176, 0.6); }
+.sw-popup.sw-amber .sw-popup-hint { color: rgba(255, 207, 122, 0.6); }
+
+.sw-hotspot.sw-terminal, .sw-hotspot.sw-amber { border-radius: 0.3em; }
+.sw-hotspot.sw-terminal { background-color: rgba(57, 255, 20, 0.14); }
+.sw-hotspot.sw-amber { background-color: rgba(255, 176, 0, 0.14); }
+.sw-hotspot.sw-terminal.sw-link:hover { background-color: rgba(57, 255, 20, 0.28); }
+.sw-hotspot.sw-amber.sw-link:hover { background-color: rgba(255, 176, 0, 0.28); }
+
+/* monospace glyphs are wider: slightly smaller chips on the phosphor themes */
+.sw-terminal .sw-chip, .sw-amber .sw-chip {
+    font-size: 0.74em;
+}
+
+.sw-section-head .sw-tile-caption {
+    margin-left: 0.6em;
+}

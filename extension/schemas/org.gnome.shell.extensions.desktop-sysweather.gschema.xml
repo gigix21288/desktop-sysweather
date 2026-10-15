@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.desktop-sysweather"
+          path="/org/gnome/shell/extensions/desktop-sysweather/">
+
+    <!-- Appearance -->
+    <key name="language" type="s">
+      <default>'auto'</default>
+      <summary>Language of the widget and its preferences: 'auto' follows the system, otherwise a language code such as 'en' or 'it'</summary>
+    </key>
+    <key name="theme" type="s">
+      <choices>
+        <choice value="dark"/>
+        <choice value="light"/>
+        <choice value="terminal"/>
+        <choice value="amber"/>
+      </choices>
+      <default>'dark'</default>
+      <summary>Widget color theme</summary>
+    </key>
+    <key name="columns" type="i">
+      <range min="1" max="2"/>
+      <default>2</default>
+      <summary>Lay the sections out in one or two columns</summary>
+    </key>
+    <key name="position" type="s">
+      <choices>
+        <choice value="top-left"/>
+        <choice value="top-center"/>
+        <choice value="top-right"/>
+        <choice value="center"/>
+        <choice value="bottom-left"/>
+        <choice value="bottom-center"/>
+        <choice value="bottom-right"/>
+      </choices>
+      <default>'top-right'</default>
+      <summary>Widget position on the desktop</summary>
+    </key>
+    <key name="background-opacity" type="i">
+      <range min="0" max="100"/>
+      <default>55</default>
+      <summary>Background opacity (percent)</summary>
+    </key>
+    <key name="scale" type="i">
+      <range min="70" max="160"/>
+      <default>100</default>
+      <summary>Widget size (percent)</summary>
+    </key>
+    <key name="monitor" type="s">
+      <default>''</default>
+      <summary>Connector of the monitor showing the widget (e.g. HDMI-1); empty = primary monitor</summary>
+    </key>
+    <key name="margin" type="i">
+      <range min="0" max="400"/>
+      <default>40</default>
+      <summary>Distance from the screen edges (pixels)</summary>
+    </key>
+    <key name="sky-background" type="b">
+      <default>true</default>
+      <summary>Tint the background like the sky (time of day and weather)</summary>
+    </key>
+
+    <!-- Content -->
+    <key name="show-header" type="b">
+      <default>true</default>
+      <summary>Show host name and uptime</summary>
+    </key>
+    <key name="show-weather" type="b">
+      <default>true</default>
+      <summary>Show current weather</summary>
+    </key>
+    <key name="show-forecast" type="b">
+      <default>true</default>
+      <summary>Show the forecast for the next days</summary>
+    </key>
+    <key name="show-hourly" type="b">
+      <default>true</default>
+      <summary>Show the next hours (every two hours) with temperature and chance of rain</summary>
+    </key>
+    <key name="show-rain" type="b">
+      <default>true</default>
+      <summary>Show rain expected in the next two hours</summary>
+    </key>
+    <key name="show-sun" type="b">
+      <default>true</default>
+      <summary>Show the sun arc, moon phase, sunrise and sunset</summary>
+    </key>
+    <key name="show-air" type="b">
+      <default>true</default>
+      <summary>Show air quality, UV index and pollen</summary>
+    </key>
+    <key name="show-advice" type="b">
+      <default>true</default>
+      <summary>Show the tip of the day</summary>
+    </key>
+    <key name="show-quakes" type="b">
+      <default>true</default>
+      <summary>Show recent earthquakes nearby</summary>
+    </key>
+    <key name="show-alerts" type="b">
+      <default>true</default>
+      <summary>Show the weather warnings in force for the region (MeteoAlarm)</summary>
+    </key>
+    <key name="show-system" type="b">
+      <default>true</default>
+      <summary>Show CPU, memory and disk</summary>
+    </key>
+    <key name="show-details" type="b">
+      <default>true</default>
+      <summary>Show network, load, fans and battery</summary>
+    </key>
+    <key name="refresh-interval" type="i">
+      <range min="1" max="30"/>
+      <default>2</default>
+      <summary>System data refresh interval (seconds)</summary>
+    </key>
+    <key name="show-clock" type="b">
+      <default>true</default>
+      <summary>Show the UTC clock and the Unix time in the header</summary>
+    </key>
+    <key name="show-processes" type="b">
+      <default>true</default>
+      <summary>Show the processes using most CPU and memory</summary>
+    </key>
+
+    <!-- Network and security -->
+    <key name="show-network" type="b">
+      <default>true</default>
+      <summary>Show public IP, VPN, Wi-Fi, local address, gateway and DNS</summary>
+    </key>
+    <key name="show-ports" type="b">
+      <default>true</default>
+      <summary>Show listening ports and active connections</summary>
+    </key>
+    <key name="show-latency" type="b">
+      <default>true</default>
+      <summary>Show the latency graph</summary>
+    </key>
+    <key name="latency-host" type="s">
+      <default>'1.1.1.1'</default>
+      <summary>Host probed for the latency (TCP port 443)</summary>
+    </key>
+    <key name="mask-public-ip" type="b">
+      <default>false</default>
+      <summary>Hide the last two octets of the public IP address</summary>
+    </key>
+    <key name="network-interval" type="i">
+      <range min="5" max="120"/>
+      <default>10</default>
+      <summary>Network data refresh interval (seconds)</summary>
+    </key>
+    <key name="public-ip-interval" type="i">
+      <range min="2" max="120"/>
+      <default>10</default>
+      <summary>Public IP refresh interval (minutes)</summary>
+    </key>
+    <key name="show-security" type="b">
+      <default>true</default>
+      <summary>Show firewall, updates, failed logins, sessions, Secure Boot, encryption</summary>
+    </key>
+    <key name="hover-details" type="b">
+      <default>true</default>
+      <summary>Show a popup with the details of a security chip or a feed entry when the pointer rests on it</summary>
+    </key>
+    <key name="security-interval" type="i">
+      <range min="1" max="60"/>
+      <default>5</default>
+      <summary>Security data refresh interval (minutes)</summary>
+    </key>
+
+    <!-- Feeds -->
+    <key name="show-feeds" type="b">
+      <default>true</default>
+      <summary>Show the newest CISA Known Exploited Vulnerabilities</summary>
+    </key>
+    <key name="show-cert-agid" type="b">
+      <default>true</default>
+      <summary>Show the latest CERT-AGID news</summary>
+    </key>
+    <key name="feeds-interval" type="i">
+      <range min="15" max="360"/>
+      <default>60</default>
+      <summary>Feeds refresh interval (minutes)</summary>
+    </key>
+    <key name="show-space" type="b">
+      <default>true</default>
+      <summary>Show space weather (Kp index) and the ISS position</summary>
+    </key>
+
+    <!-- Notifications -->
+    <key name="notify-vpn" type="b">
+      <default>true</default>
+      <summary>Send a desktop notification when the VPN drops</summary>
+    </key>
+    <key name="notify-ransomware" type="b">
+      <default>true</default>
+      <summary>Send a desktop notification when CISA adds a vulnerability used by ransomware</summary>
+    </key>
+    <key name="notify-logins" type="b">
+      <default>true</default>
+      <summary>Send a desktop notification when failed logins pile up between two checks</summary>
+    </key>
+    <key name="notify-weather-alerts" type="b">
+      <default>true</default>
+      <summary>Send a desktop notification for new orange and red weather warnings</summary>
+    </key>
+    <key name="kev-notified-date" type="s">
+      <default>''</default>
+      <summary>Newest "date added" of the ransomware entries already notified (internal)</summary>
+    </key>
+
+    <!-- Weather -->
+    <key name="location-mode" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="manual"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>How the weather location is determined</summary>
+    </key>
+    <key name="city-name" type="s">
+      <default>''</default>
+      <summary>Display name of the manually chosen city</summary>
+    </key>
+    <key name="city-region" type="s">
+      <default>''</default>
+      <summary>Region (first-level administrative area) of the manually chosen city, for the weather warnings</summary>
+    </key>
+    <key name="city-country" type="s">
+      <default>''</default>
+      <summary>ISO 3166-1 country code of the manually chosen city</summary>
+    </key>
+    <key name="latitude" type="d">
+      <default>0</default>
+      <summary>Latitude of the manually chosen city</summary>
+    </key>
+    <key name="longitude" type="d">
+      <default>0</default>
+      <summary>Longitude of the manually chosen city</summary>
+    </key>
+    <key name="units" type="s">
+      <choices>
+        <choice value="metric"/>
+        <choice value="imperial"/>
+      </choices>
+      <default>'metric'</default>
+      <summary>Units for temperatures and wind speed</summary>
+    </key>
+    <key name="weather-interval" type="i">
+      <range min="10" max="180"/>
+      <default>30</default>
+      <summary>Weather refresh interval (minutes)</summary>
+    </key>
+
+    <!-- Earthquakes -->
+    <key name="quake-min-magnitude" type="d">
+      <range min="1.0" max="6.0"/>
+      <default>2.5</default>
+      <summary>Smallest earthquake magnitude to report</summary>
+    </key>
+    <key name="quake-radius" type="i">
+      <range min="25" max="500"/>
+      <default>100</default>
+      <summary>Earthquake search radius (km)</summary>
+    </key>
+  </schema>
+</schemalist>

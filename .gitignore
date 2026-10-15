@@ -1,0 +1,5 @@
+# build outputs (recreated by ./build.py)
+build/
+dist/
+*.mo
+*~

@@ -1,0 +1,18 @@
+{
+  "uuid": "desktop-sysweather@piorio.github.io",
+  "name": "Desktop System & Weather Widget",
+  "description": "A living desktop widget for people who love tech: CPU, memory, disk, network, GPU, fans and battery next to the local weather with a sky background that follows the time of day, rain in the next two hours, weather warnings from the national weather service (MeteoAlarm), sun arc and moon phase, air quality, UV and pollen, space weather and the ISS, a tip of the day and recent earthquakes. Plus a network and security panel: public IP and ISP, VPN watch, Wi-Fi encryption, local address, gateway and DNS, listening and exposed ports, latency graph, firewall, pending updates, failed logins, remote sessions, Secure Boot, disk encryption, containers, top processes, the CISA KEV and CERT-AGID feeds, desktop notifications when the VPN drops, failed logins pile up, a severe weather warning is issued or a ransomware vulnerability is added to the KEV catalogue, a UTC/Unix clock, two terminal themes, and a language switch (English, Italian) independent of the system locale.",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.desktop-sysweather",
+  "gettext-domain": "desktop-sysweather",
+  "url": "https://github.com/gigix21288/desktop-sysweather",
+  "version": 8,
+  "version-name": "1.6.0"
+}
