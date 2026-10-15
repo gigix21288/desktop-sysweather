@@ -46,6 +46,11 @@
       <default>100</default>
       <summary>Widget size (percent)</summary>
     </key>
+    <key name="fitted-scale" type="i">
+      <range min="0" max="160"/>
+      <default>0</default>
+      <summary>Size actually in use when the card had to be shrunk to fit the screen (0 = the chosen size); written by the extension, read by the preferences</summary>
+    </key>
     <key name="monitor" type="s">
       <default>''</default>
       <summary>Connector of the monitor showing the widget (e.g. HDMI-1); empty = primary monitor</summary>

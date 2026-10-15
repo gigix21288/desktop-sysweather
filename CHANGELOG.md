@@ -2,6 +2,21 @@
 
 Tutte le modifiche rilevanti del widget. Le date sono quelle di build dei pacchetti.
 
+## 1.7.0 — 2026-10-15
+
+- **Adattamento agli schermi bassi**: se la scheda è più alta dell'area di lavoro (per esempio
+  sui portatili 1366x768 o sui monitor 1600x900) viene ridotta da sola, a passi del 2% e fino al
+  50%, finché sta sopra la barra; torna alla dimensione scelta quando c'è di nuovo spazio
+  (monitor più grande, sezioni nascoste). La riga *Dimensione* delle preferenze indica la
+  dimensione effettivamente in uso.
+- **Maschera dell'IP pubblico completa**: con l'opzione attiva resta visibile solo il primo
+  numero ("151.•.•.•"); prima restavano i primi due, che identificano comunque l'operatore.
+- **Screenshot dei temi Terminal** (verde e ambra) nel README.
+- **Test unitari e integrazione continua**: `tests/run.sh` esegue con gjs i test dei moduli puri
+  (orologio e fusi orari, luna, regioni MeteoAlarm, parser di dnf, zypper, accessi falliti,
+  feed MeteoAlarm e RSS); su GitHub un flusso Actions esegue i test e la build a ogni push e
+  pubblica la release con i pacchetti a ogni tag `vX.Y.Z`.
+
 ## 1.6.1 — 2026-10-15
 
 - **Orologio nell'intestazione**: ora mostra l'**ora di sistema** (con i secondi, nel formato 12 o

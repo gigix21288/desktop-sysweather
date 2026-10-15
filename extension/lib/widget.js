@@ -1713,9 +1713,10 @@ class SysWeatherDesktopWidget extends St.Widget {
         }
         let ip = info.ip;
         if (mask) {
+            // only the first group stays: the second already identifies the provider
             ip = ip.includes(':')
-                ? `${ip.split(':').slice(0, 2).join(':')}:•••`
-                : `${ip.split('.').slice(0, 2).join('.')}.•.•`;
+                ? `${ip.split(':')[0]}:•••`
+                : `${ip.split('.')[0]}.•.•.•`;
         }
         this._publicIpLabel.text = ip;
         this._publicIpOrg.text = [info.org, info.country].filter(Boolean).join(' · ');

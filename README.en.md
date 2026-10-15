@@ -86,6 +86,13 @@ without privileges (NetworkManager over D-Bus, `/proc`, `/sys`, systemd and logi
 ![Light theme](docs/screenshot-light.png)
 ![Preferences](docs/screenshot-prefs.png)
 
+The Terminal themes, green and amber:
+
+<p>
+<img src="docs/screenshot-terminal.png" width="49%" alt="Green terminal theme">
+<img src="docs/screenshot-amber.png" width="49%" alt="Amber terminal theme">
+</p>
+
 ## Features
 
 | Setting | Options |
@@ -94,7 +101,7 @@ without privileges (NetworkManager over D-Bus, `/proc`, `/sys`, systemd and logi
 | Theme | Dark / Light / Green terminal / Amber terminal |
 | Layout | One or two columns |
 | Background opacity | 0–100% |
-| Size | 70–160% |
+| Size | 70–160%; a card taller than the screen is shrunk automatically until it fits above the panel |
 | Position | top left / centre / right, centre, bottom left / centre / right |
 | Monitor | primary, or a screen chosen by name (e.g. HDMI-1); falls back to the primary one when it is unplugged |
 | Margin from the edges | in pixels |
@@ -157,7 +164,7 @@ them from source with `./build.py` (see [Development](#development)).
 ### .deb package (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.1_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.7.0_all.deb
 ```
 
 Then **log out and back in** and enable the widget from the *Extensions* app, or with
@@ -221,12 +228,15 @@ po/                   translations (it)
 build.py              builds dist/*.zip and dist/*.deb
 install.sh            per-user installation from the .zip
 tools/                msgfmt.py (fallback .po compiler), nested-shell.sh (testing)
+tests/                unit tests of the pure modules (gjs), run by tests/run.sh and by the CI
+.github/workflows/    GitHub Actions: tests and build on every push, release on every vX.Y.Z tag
 CHANGELOG.md          version history
 ```
 
 ```bash
 ./build.py            # builds zip and deb in dist/
 ./build.py zip        # zip only
+tests/run.sh          # unit tests (needs gjs)
 ```
 
 The build needs `python3` and `glib-compile-schemas`, plus `dpkg-deb` to create the `.deb`.

@@ -13,6 +13,6 @@
   "settings-schema": "org.gnome.shell.extensions.desktop-sysweather",
   "gettext-domain": "desktop-sysweather",
   "url": "https://github.com/gigix21288/desktop-sysweather",
-  "version": 9,
-  "version-name": "1.6.1"
+  "version": 10,
+  "version-name": "1.7.0"
 }

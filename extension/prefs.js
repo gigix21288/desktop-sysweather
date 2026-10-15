@@ -217,7 +217,16 @@ export default class DesktopSysWeatherPreferences extends ExtensionPreferences {
         ], '', true));
         style.add(scaleRow(settings, 'background-opacity', _('Background opacity'), 0, 100,
             _('0% = fully transparent')));
-        style.add(scaleRow(settings, 'scale', _('Size'), 70, 160));
+        const sizeRow = scaleRow(settings, 'scale', _('Size'), 70, 160);
+        const sizeNote = () => {
+            const fitted = settings.get_int('fitted-scale');
+            sizeRow.subtitle = fitted > 0
+                ? fmt(_('Shown at %d%% so that the card fits above the panel of this screen'), fitted)
+                : _('A card taller than the screen is shrunk automatically');
+        };
+        sizeNote();
+        track(settings, settings.connect('changed::fitted-scale', sizeNote));
+        style.add(sizeRow);
         style.add(switchRow(settings, 'sky-background', _('Living sky background'),
             _('The card is tinted like the sky: day, dusk, night with stars, rain and snow')));
         page.add(style);
@@ -455,7 +464,7 @@ export default class DesktopSysWeatherPreferences extends ExtensionPreferences {
         network.add(switchRow(settings, 'show-network', _('Public IP, VPN, Wi-Fi, local address, gateway and DNS'),
             _('Warns when the VPN drops or the public IP changes')));
         network.add(switchRow(settings, 'mask-public-ip', _('Mask the public IP'),
-            _('Shows 151.43.•.• instead of the full address: handy for screenshots and screen sharing')));
+            _('Shows 151.•.•.• instead of the full address: handy for screenshots and screen sharing')));
         network.add(switchRow(settings, 'show-ports', _('Listening ports and connections'),
             _('TCP ports open to the network are listed explicitly')));
         network.add(switchRow(settings, 'show-latency', _('Latency graph')));

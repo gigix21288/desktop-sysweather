@@ -746,8 +746,8 @@ msgstr "Rovesci"
 msgid "Shown under the computer name"
 msgstr "Mostrato sotto il nome del computer"
 
-msgid "Shows 151.43.•.• instead of the full address: handy for screenshots and screen sharing"
-msgstr "Mostra 151.43.•.• invece dell'indirizzo completo: comodo per screenshot e condivisione dello schermo"
+msgid "Shows 151.•.•.• instead of the full address: handy for screenshots and screen sharing"
+msgstr "Mostra 151.•.•.• invece dell'indirizzo completo: comodo per screenshot e condivisione dello schermo"
 
 msgid "Six steps of two hours with temperature and chance of rain"
 msgstr "Sei fasce di due ore con temperatura e probabilità di pioggia"
@@ -1240,3 +1240,9 @@ msgstr "Ora di sistema e UTC"
 
 msgid "The Unix time always follows"
 msgstr "Il tempo Unix segue sempre"
+
+msgid "Shown at %d%% so that the card fits above the panel of this screen"
+msgstr "Mostrata al %d%% perché la scheda stia sopra la barra di questo schermo"
+
+msgid "A card taller than the screen is shrunk automatically"
+msgstr "Una scheda più alta dello schermo viene ridotta da sola"

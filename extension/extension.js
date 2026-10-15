@@ -32,6 +32,10 @@ const POPUP_GAP = 6;
 const POPUP_HOVER_POLLS = 2;
 const AUTO_LOCATION_TTL_US = 3 * 3600 * 1e6;
 const TICK_SECONDS = 60;
+// the card is shrunk in steps of this many percent until it fits the work area
+const FIT_STEP = 2;
+const FIT_MIN_SCALE = 50;
+const FIT_HEADROOM = 0.97;
 const PROCESS_EVERY_SAMPLES = 3;
 const FEED_RETRY_SECONDS = 300;
 const SPACE_INTERVAL_SECONDS = 30 * 60;
@@ -130,6 +134,11 @@ export default class DesktopSysWeatherExtension extends Extension {
                 })]);
         }
 
+        this._fitScale = null;
+        this._fitHeights = new Map();
+        // a stale value survives a session that ended without disable()
+        if (this._settings.get_int('fitted-scale') !== 0)
+            this._settings.set_int('fitted-scale', 0);
         this._applyAppearance();
         this._applySections();
         this._restartSystemTimer();
@@ -153,6 +162,10 @@ export default class DesktopSysWeatherExtension extends Extension {
         for (const [object, id] of this._signals)
             object.disconnect(id);
         this._signals = null;
+        if (this._settings.get_int('fitted-scale') !== 0)
+            this._settings.set_int('fitted-scale', 0);
+        this._fitScale = null;
+        this._fitHeights = null;
 
         this._pointerWatch?.remove();
         this._pointerWatch = null;
@@ -208,6 +221,8 @@ export default class DesktopSysWeatherExtension extends Extension {
             return;
         }
         if (APPEARANCE_KEYS.includes(key)) {
+            if (key === 'scale' || key === 'columns')
+                this._resetFit();
             this._applyAppearance();
         } else if (SECTION_KEYS.includes(key)) {
             this._applySections();
@@ -228,6 +243,8 @@ export default class DesktopSysWeatherExtension extends Extension {
             else if (key === 'show-alerts' || key === 'show-weather')
                 this._scheduleWarnings(1);
         } else if (key === 'position' || key === 'margin' || key === 'monitor') {
+            if (key !== 'position')
+                this._resetFit();
             this._queueReposition();
         } else if (key === 'refresh-interval') {
             this._restartSystemTimer();
@@ -263,9 +280,14 @@ export default class DesktopSysWeatherExtension extends Extension {
         setClockFormat(this._interfaceSettings?.get_string('clock-format') ?? '24h');
     }
 
+    /** The size in use: the chosen one, or the smaller one that fits the screen. */
+    _effectiveScale() {
+        return this._fitScale ?? this._settings.get_int('scale');
+    }
+
     _applyAppearance() {
         const theme = this._settings.get_string('theme');
-        const scale = this._settings.get_int('scale');
+        const scale = this._effectiveScale();
         this._widget.setAppearance({
             theme,
             opacity: this._settings.get_int('background-opacity'),
@@ -615,6 +637,11 @@ export default class DesktopSysWeatherExtension extends Extension {
         const [w, h] = [this._widget.width, this._widget.height];
         const position = this._settings.get_string('position');
 
+        // a card taller than the work area is shrunk first; the new size
+        // changes the height and queues another reposition
+        if (this._fitToArea(area.height - 2 * margin, h))
+            return;
+
         let x = area.x + (area.width - w) / 2;
         let y = area.y + (area.height - h) / 2;
         if (position.endsWith('left'))
@@ -629,6 +656,63 @@ export default class DesktopSysWeatherExtension extends Extension {
         this._widget.set_position(Math.round(x), Math.round(y));
         this._hideGear();
         this._hidePopup();
+    }
+
+    /**
+     * Shrinks the card (in FIT_STEP percent steps, never below FIT_MIN_SCALE)
+     * when it is taller than the available height, and grows it back towards
+     * the chosen size when there is room again. Sizes seen not to fit are
+     * remembered so the card cannot oscillate between two sizes; that memory
+     * is dropped when the content height changes (a section shown or hidden).
+     *
+     * @param {number} available the work area height minus the margins
+     * @param {number} height the current card height
+     * @returns {boolean} whether a new size was applied
+     */
+    _fitToArea(available, height) {
+        if (!(height > 0) || !(available > 0))
+            return false;
+        const chosen = this._settings.get_int('scale');
+        const current = this._effectiveScale();
+        const seen = this._fitHeights.get(current);
+        if (seen !== undefined && Math.abs(seen - height) > 2)
+            this._fitHeights.clear();
+        this._fitHeights.set(current, height);
+        // the height at another size, assuming it follows the font size
+        const estimate = size => height * size / current;
+        const failed = size => (this._fitHeights.get(size) ?? 0) > available;
+
+        let wanted = this._fitScale;
+        if (height > available) {
+            let size = current - FIT_STEP;
+            while (size > FIT_MIN_SCALE && (estimate(size) > available || failed(size)))
+                size -= FIT_STEP;
+            wanted = Math.max(FIT_MIN_SCALE, size);
+            if (wanted >= current)
+                wanted = this._fitScale;
+        } else if (this._fitScale !== null) {
+            let size = chosen;
+            while (size > current && (estimate(size) > available * FIT_HEADROOM || failed(size)))
+                size -= FIT_STEP;
+            if (size > current)
+                wanted = size === chosen ? null : size;
+        }
+        if (wanted === this._fitScale)
+            return false;
+        this._fitScale = wanted;
+        this._settings.set_int('fitted-scale', wanted ?? 0);
+        this._applyAppearance();
+        return true;
+    }
+
+    _resetFit() {
+        if (!this._fitHeights)
+            return;
+        this._fitHeights.clear();
+        if (this._fitScale !== null) {
+            this._fitScale = null;
+            this._settings.set_int('fitted-scale', 0);
+        }
     }
 
     /**

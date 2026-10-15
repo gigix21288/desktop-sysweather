@@ -85,6 +85,13 @@ locale senza privilegi (NetworkManager via D-Bus, `/proc`, `/sys`, systemd e log
 ![Tema chiaro](docs/screenshot-light.png)
 ![Preferenze](docs/screenshot-prefs.png)
 
+I temi Terminal, verde e ambra:
+
+<p>
+<img src="docs/screenshot-terminal.png" width="49%" alt="Tema Terminal verde">
+<img src="docs/screenshot-amber.png" width="49%" alt="Tema Terminal ambra">
+</p>
+
 ## Funzionalità
 
 | Impostazione | Opzioni |
@@ -93,7 +100,7 @@ locale senza privilegi (NetworkManager via D-Bus, `/proc`, `/sys`, systemd e log
 | Tema | Scuro / Chiaro / Terminale verde / Terminale ambra |
 | Disposizione | Una o due colonne |
 | Trasparenza dello sfondo | 0–100% |
-| Dimensione | 70–160% |
+| Dimensione | 70–160%; una scheda più alta dello schermo viene ridotta da sola finché sta sopra la barra |
 | Posizione | in alto a sinistra / al centro / a destra, al centro, in basso a sinistra / al centro / a destra |
 | Monitor | primario oppure uno schermo scelto per nome (es. HDMI-1); se è scollegato si torna al primario |
 | Margine dai bordi | in pixel |
@@ -158,7 +165,7 @@ costruiscono dai sorgenti con `./build.py` (vedi [Sviluppo](#sviluppo)).
 ### Pacchetto .deb (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.6.1_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.7.0_all.deb
 ```
 
 Poi **esci e rientra** nella sessione e attiva il widget dall'app *Estensioni*, oppure con
@@ -224,12 +231,15 @@ po/                   traduzioni (it)
 build.py              crea dist/*.zip e dist/*.deb
 install.sh            installazione per l'utente corrente dal .zip
 tools/                msgfmt.py (compilatore .po di riserva), nested-shell.sh (test)
+tests/                test unitari dei moduli puri (gjs), eseguiti da tests/run.sh e dalla CI
+.github/workflows/    GitHub Actions: test e build a ogni push, release a ogni tag vX.Y.Z
 CHANGELOG.md          storia delle versioni
 ```
 
 ```bash
 ./build.py            # crea zip e deb in dist/
 ./build.py zip        # solo zip
+tests/run.sh          # test unitari (richiede gjs)
 ```
 
 La build richiede `python3` e `glib-compile-schemas`, più `dpkg-deb` per creare il `.deb`.
