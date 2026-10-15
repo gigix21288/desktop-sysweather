@@ -1,5 +1,7 @@
 # Desktop System & Weather Widget
 
+🇬🇧 [English version](README.en.md)
+
 **Cosa fa.** È un'estensione di GNOME Shell che disegna sullo sfondo del desktop una scheda
 trasparente, sempre sotto le finestre, con tre cose in un colpo d'occhio: lo stato del computer
 (CPU, memoria, disco, rete, GPU, ventole, batteria), il meteo del posto in cui ti trovi (condizioni,
