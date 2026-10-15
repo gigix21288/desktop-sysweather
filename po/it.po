@@ -1246,3 +1246,15 @@ msgstr "Mostrata al %d%% perché la scheda stia sopra la barra di questo schermo
 
 msgid "A card taller than the screen is shrunk automatically"
 msgstr "Una scheda più alta dello schermo viene ridotta da sola"
+
+msgid "primary connection"
+msgstr "connessione principale"
+
+msgid "virtual"
+msgstr "virtuale"
+
+msgid "The Download and Upload tiles follow the primary connection. VPN tunnels, bridges and container interfaces appear only here."
+msgstr "I riquadri Download e Upload seguono la connessione principale. Tunnel VPN, bridge e interfacce dei container compaiono solo qui."
+
+msgid "Network interfaces"
+msgstr "Interfacce di rete"

@@ -13,10 +13,13 @@ const METEOALARM_FEED_URL = 'https://feeds.meteoalarm.org/feeds/meteoalarm-legac
 export const METEOALARM_URL = 'https://meteoalarm.org';
 // ISO country code -> feed name, for the countries whose feed was verified
 export const METEOALARM_COUNTRIES = {
-    AT: 'austria', BE: 'belgium', CH: 'switzerland', CZ: 'czechia', DE: 'germany',
-    ES: 'spain', FR: 'france', GB: 'united-kingdom', GR: 'greece', HR: 'croatia',
-    IE: 'ireland', IT: 'italy', MT: 'malta', NL: 'netherlands', PL: 'poland',
-    PT: 'portugal', SI: 'slovenia',
+    AT: 'austria', BA: 'bosnia-herzegovina', BE: 'belgium', BG: 'bulgaria', CH: 'switzerland',
+    CY: 'cyprus', CZ: 'czechia', DE: 'germany', DK: 'denmark', EE: 'estonia', ES: 'spain',
+    FI: 'finland', FR: 'france', GB: 'united-kingdom', GR: 'greece', HR: 'croatia',
+    HU: 'hungary', IE: 'ireland', IL: 'israel', IS: 'iceland', IT: 'italy', LT: 'lithuania',
+    LU: 'luxembourg', LV: 'latvia', MD: 'moldova', ME: 'montenegro', MT: 'malta',
+    NL: 'netherlands', NO: 'norway', PL: 'poland', PT: 'portugal', RO: 'romania',
+    RS: 'serbia', SE: 'sweden', SI: 'slovenia', SK: 'slovakia',
 };
 const KEV_RECENT = 5;
 export const NVD_URL = 'https://nvd.nist.gov/vuln/detail/';

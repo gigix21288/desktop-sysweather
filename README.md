@@ -9,7 +9,7 @@ prossime ore, previsioni, allerte ufficiali, pioggia imminente, sole, luna, aria
 pannello di rete e sicurezza (IP pubblico e VPN, Wi-Fi, porte aperte, firewall, aggiornamenti,
 accessi falliti, vulnerabilità CISA KEV e notizie CERT-AGID). Non servono chiavi API, programmi
 aggiuntivi né privilegi di amministratore: i dati di sistema li legge da `/proc`, `/sys` e D-Bus.
-Interfaccia in italiano e inglese. Compatibile con **GNOME Shell 45–50** su Zorin OS 18, Ubuntu
+Interfaccia in italiano, inglese, spagnolo, francese e tedesco. Compatibile con **GNOME Shell 45–50** su Zorin OS 18, Ubuntu
 24.04+, Debian 13+, Fedora 39+ e altre (vedi [Compatibilità](#compatibilità)).
 
 In dettaglio, mostra:
@@ -25,8 +25,9 @@ In dettaglio, mostra:
 - **Prossime ore**: sei fasce di due ore con orario, icona giorno/notte, temperatura e
   probabilità di pioggia quando supera il 20%
 - **Allerte meteo**: le allerte gialle, arancioni e rosse del servizio meteorologico nazionale
-  per la tua regione, diffuse da [MeteoAlarm](https://meteoalarm.org) (Italia e altri 16 paesi
-  europei), con dettagli al passaggio del mouse e notifica desktop per quelle arancioni e rosse
+  per la tua regione, diffuse da [MeteoAlarm](https://meteoalarm.org) (Italia e altri 35 paesi
+  europei), fino a tre allerte nella scheda, dettagli al passaggio del mouse e notifica desktop
+  per quelle arancioni e rosse
 - **Pioggia nelle prossime due ore**: "Pioggia tra 25 min · per ~45 min", con una mini barra
   a intervalli di 15 minuti (compare solo quando serve)
 - **Sole e luna**: arco del sole con la posizione attuale, orari di alba e tramonto, tempo che
@@ -48,7 +49,9 @@ locale senza privilegi (NetworkManager via D-Bus, `/proc`, `/sys`, systemd e log
 
 - **Rete**: IP pubblico con operatore e paese (mascherabile per gli screenshot), stato VPN con
   avviso se la VPN cade o l'IP pubblico cambia, Wi-Fi con banda e cifratura (segnala reti aperte,
-  WEP e WPA1), IP locale, gateway, DNS e interfaccia
+  WEP e WPA1), IP locale, gateway, DNS e interfaccia; al passaggio del mouse su Download, Upload
+  o Interfaccia l'elenco di tutte le interfacce con traffico (Wi-Fi, Ethernet, VPN, bridge,
+  container) e la velocità di ciascuna
 - **Dispositivi nella rete locale**: quanti sono (dalla cache ARP, senza generare traffico),
   con IP e MAC nel riquadro al passaggio del mouse e un avviso quando ne compare uno nuovo
 - **Porte e connessioni**: porte TCP in ascolto, quelle esposte verso la rete elencate per nome
@@ -96,7 +99,7 @@ I temi Terminal, verde e ambra:
 
 | Impostazione | Opzioni |
 |---|---|
-| Lingua | Lingua di sistema, English, Italiano (vale per il widget e per le preferenze) |
+| Lingua | Lingua di sistema, English, Italiano, Español, Français, Deutsch (vale per il widget e per le preferenze) |
 | Tema | Scuro / Chiaro / Terminale verde / Terminale ambra |
 | Disposizione | Una o due colonne |
 | Trasparenza dello sfondo | 0–100% |
@@ -141,9 +144,13 @@ forniscono:
   `.zip` con `install.sh` o `gnome-extensions install`.
 - Non funziona su desktop diversi da GNOME (KDE Plasma, XFCE/Zorin Lite, Cinnamon, MATE,
   COSMIC) né su GNOME Shell 44 e precedenti.
-- Le allerte meteo coprono Italia, Francia, Spagna, Germania, Austria, Svizzera, Regno Unito,
-  Portogallo, Grecia, Paesi Bassi, Belgio, Croazia, Slovenia, Malta, Irlanda, Polonia e Cechia
-  (feed MeteoAlarm); i terremoti usano INGV in Italia e USGS altrove.
+- Le allerte meteo coprono i 36 paesi con un feed MeteoAlarm: Italia, Francia, Spagna, Germania,
+  Austria, Svizzera, Regno Unito, Irlanda, Portogallo, Grecia, Cipro, Malta, Paesi Bassi, Belgio,
+  Lussemburgo, Danimarca, Norvegia, Svezia, Finlandia, Islanda, Estonia, Lettonia, Lituania,
+  Polonia, Cechia, Slovacchia, Ungheria, Romania, Bulgaria, Croazia, Slovenia, Serbia, Bosnia ed
+  Erzegovina, Montenegro, Moldavia e Israele. L'abbinamento con la regione è verificato per
+  l'Italia; altrove dipende da come il servizio nazionale nomina le zone. I terremoti usano INGV
+  in Italia e USGS altrove.
 
 Il widget è disegnato nel livello dello sfondo di GNOME Shell: resta sotto tutte le finestre
 e non compare in Alt+Tab. Legge i dati direttamente da `/proc`, `/sys` e D-Bus, quindi non servono
@@ -165,7 +172,7 @@ costruiscono dai sorgenti con `./build.py` (vedi [Sviluppo](#sviluppo)).
 ### Pacchetto .deb (Zorin OS, Ubuntu, Debian)
 
 ```bash
-sudo apt install ./gnome-shell-extension-desktop-sysweather_1.7.0_all.deb
+sudo apt install ./gnome-shell-extension-desktop-sysweather_1.8.0_all.deb
 ```
 
 Poi **esci e rientra** nella sessione e attiva il widget dall'app *Estensioni*, oppure con
@@ -227,7 +234,7 @@ extension/            sorgenti dell'estensione (ESM, GNOME 45+)
   lib/security.js     stato di sicurezza locale (apt, journal, systemd, login1, /sys)
   lib/feeds.js        CISA KEV, CERT-AGID, NOAA, ISS, MeteoAlarm, IP pubblico
   stylesheet.css      temi scuro e chiaro
-po/                   traduzioni (it)
+po/                   traduzioni (it, es, fr, de)
 build.py              crea dist/*.zip e dist/*.deb
 install.sh            installazione per l'utente corrente dal .zip
 tools/                msgfmt.py (compilatore .po di riserva), nested-shell.sh (test)

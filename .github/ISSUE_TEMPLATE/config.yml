@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Compatibility table / Tabella di compatibilità
+    url: https://github.com/gigix21288/desktop-sysweather#compatibilit%C3%A0
+    about: Check first that your desktop is GNOME Shell 45–50 (not KDE, XFCE, Cinnamon, COSMIC).

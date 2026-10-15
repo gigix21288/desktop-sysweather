@@ -1,0 +1,15 @@
+name: Feature request / Proposta
+description: An idea for the widget (English or Italian · in inglese o in italiano)
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like the widget to show or do?
+      description: Where in the card it would go (weather, system, network, security) and what data source it would use, if you know one that needs no API key.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful?

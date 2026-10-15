@@ -2,6 +2,20 @@
 
 Tutte le modifiche rilevanti del widget. Le date sono quelle di build dei pacchetti.
 
+## 1.8.0 — 2026-10-15
+
+- **Spagnolo, francese e tedesco** oltre a italiano e inglese, nel menu *Lingua* delle preferenze.
+- **Allerte meteo in 36 paesi**: aggiunti i feed MeteoAlarm di Norvegia, Svezia, Finlandia,
+  Danimarca, Islanda, Estonia, Lettonia, Lituania, Lussemburgo, Ungheria, Slovacchia, Romania,
+  Bulgaria, Serbia, Bosnia ed Erzegovina, Montenegro, Moldavia, Cipro e Israele (tutti verificati
+  raggiungibili; l'abbinamento con la regione dipende da come il servizio nazionale nomina le zone).
+- **Chip delle allerte con tutte le allerte**: fino a tre righe, una per allerta, dalla più grave;
+  oltre la terza compare "+N". Il riquadro al passaggio del mouse resta completo.
+- **Velocità per interfaccia**: fermando il mouse sui riquadri Download, Upload o Interfaccia
+  compare l'elenco di tutte le interfacce con traffico (Wi-Fi, Ethernet, tunnel VPN, bridge e
+  container), con download e upload di ciascuna e l'indicazione della connessione principale.
+- Modelli per le segnalazioni su GitHub (bug, proposte, pull request).
+
 ## 1.7.0 — 2026-10-15
 
 - **Adattamento agli schermi bassi**: se la scheda è più alta dell'area di lavoro (per esempio

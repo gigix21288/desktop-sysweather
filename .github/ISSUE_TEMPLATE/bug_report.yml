@@ -1,0 +1,52 @@
+name: Bug report / Segnalazione di un problema
+description: Something does not work (English or Italian are both fine · puoi scrivere in italiano)
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The three fields below save a round of questions. · Grazie, i tre campi qui sotto evitano un giro di domande.
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution and version
+      description: e.g. Zorin OS 18.1, Ubuntu 24.04, Fedora 41
+      placeholder: Zorin OS 18.1
+    validations:
+      required: true
+  - type: input
+    id: gnome
+    attributes:
+      label: GNOME Shell version and session
+      description: "`gnome-shell --version`, and Wayland or X11 (Settings → System → About)"
+      placeholder: GNOME Shell 46.0, Wayland
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Widget version
+      description: "`gnome-extensions info desktop-sysweather@piorio.github.io | grep -i vers`"
+      placeholder: 1.7.0
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what you expected
+      description: Steps to reproduce if you know them. Screenshots are welcome (mask your public IP, there is a switch for it in the Network preferences).
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Shell log
+      description: "Output of the command below, taken right after the problem (extension errors appear here):"
+      render: shell
+      placeholder: |
+        journalctl --user -b -o cat | grep -iE "sysweather|JS ERROR" | tail -40
+  - type: textarea
+    id: prefs
+    attributes:
+      label: Relevant preferences
+      description: Theme, layout, size, weather location mode (automatic or city), sections hidden… only what seems related.

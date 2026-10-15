@@ -149,6 +149,9 @@ function firstSentence(text, limit = 180) {
 }
 
 /** A chip whose colour follows a level: good, fair, moderate, poor, very-poor, hazardous or none. */
+// how many weather warnings the chip lists before a "+N"
+const WARNING_LINES = 3;
+
 function setChip(actor, text, level = 'none', extraClass = '') {
     actor.text = text;
     actor.style_class = `sw-chip ${extraClass} ${level === 'none' ? '' : `sw-level-${level}`}`.replace(/\s+/g, ' ').trim();
@@ -1062,6 +1065,8 @@ class SysWeatherDesktopWidget extends St.Widget {
         };
         ['ip', 'gateway', 'dns', 'iface'].forEach((name, i) =>
             this._netGrid.attach(this._netTiles[name].actor, i % 2, Math.floor(i / 2), 1, 1));
+        for (const tile of [this._tiles.down, this._tiles.up, this._netTiles.iface])
+            this._hotspots.set(tile.actor, () => this._interfacesDetail());
         this._network.add_child(tiles);
 
         // devices seen on the local network, with the list in the hover popup
@@ -1415,14 +1420,18 @@ class SysWeatherDesktopWidget extends St.Widget {
             .sort((a, b) => b.info.rank - a.info.rank || (a.expires ?? Infinity) - (b.expires ?? Infinity));
         const top = this._warnings[0];
         if (top) {
-            const parts = [`⚠ ${top.info.text}`];
-            if (top.onset && top.onset > now)
-                parts.push(fmt(_('from %s'), whenLabel(top.onset)));
-            else if (top.expires)
-                parts.push(fmt(_('until %s'), whenLabel(top.expires)));
-            if (this._warnings.length > 1)
-                parts.push(`+${this._warnings.length - 1}`);
-            setChip(this._warningChip, parts.join(' · '), top.info.level, 'sw-warning');
+            // one line per warning, the most severe first; the hover panel has the rest
+            const lines = this._warnings.slice(0, WARNING_LINES).map(w => {
+                const parts = [`⚠ ${w.info.text}`];
+                if (w.onset && w.onset > now)
+                    parts.push(fmt(_('from %s'), whenLabel(w.onset)));
+                else if (w.expires)
+                    parts.push(fmt(_('until %s'), whenLabel(w.expires)));
+                return parts.join(' · ');
+            });
+            if (this._warnings.length > WARNING_LINES)
+                lines[lines.length - 1] += ` · +${this._warnings.length - WARNING_LINES}`;
+            setChip(this._warningChip, lines.join('\n'), top.info.level, 'sw-warning');
         }
         this._applyWeatherVisibility();
     }
@@ -1441,6 +1450,27 @@ class SysWeatherDesktopWidget extends St.Widget {
         });
         lines.push('', _('Issued by the national weather service and relayed by MeteoAlarm. Click for the details.'));
         return {title: _('Weather warnings'), body: lines.join('\n'), link: this._warnings[0].link};
+    }
+
+    /** The hover panel of the Download, Upload and Interface tiles: every interface with its rate. */
+    _interfacesDetail() {
+        const all = this._lastNet?.all;
+        if (!all || !Object.keys(all).length)
+            return null;
+        const primary = this._networkData?.primary?.iface;
+        const total = n => all[n].rx + all[n].tx;
+        const names = Object.keys(all).sort((a, b) =>
+            (b === primary) - (a === primary) || total(b) - total(a) || a.localeCompare(b));
+        const lines = names.map(n => {
+            const tags = [];
+            if (n === primary)
+                tags.push(_('primary connection'));
+            if (!all[n].physical)
+                tags.push(_('virtual'));
+            return `• ${n}${tags.length ? ` (${tags.join(', ')})` : ''} · ↓ ${formatBytes(all[n].rx)}/s · ↑ ${formatBytes(all[n].tx)}/s`;
+        });
+        lines.push('', _('The Download and Upload tiles follow the primary connection. VPN tunnels, bridges and container interfaces appear only here.'));
+        return {title: _('Network interfaces'), body: lines.join('\n')};
     }
 
     /**
@@ -2187,6 +2217,7 @@ class SysWeatherDesktopWidget extends St.Widget {
         // knows it, otherwise every physical interface together
         const iface = this._networkData?.primary?.iface;
         const rate = (iface && s.net.ifaces?.[iface]) ?? s.net;
+        this._lastNet = s.net;
         t.down.set(`${formatBytes(rate.rx)}/s`);
         t.up.set(`${formatBytes(rate.tx)}/s`);
         if (s.load !== null) {

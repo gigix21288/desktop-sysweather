@@ -1,6 +1,6 @@
 import {equal, ok, done} from './assert.js';
 import {compareVersions, parseDnfCheckUpdate, parseLoginFailure, parseZypperTable} from '../extension/lib/security.js';
-import {parseMeteoalarm, parseRss} from '../extension/lib/feeds.js';
+import {METEOALARM_COUNTRIES, parseMeteoalarm, parseRss} from '../extension/lib/feeds.js';
 
 ok(compareVersions('7.0.0-38', '6.17.0-20') > 0, 'kernel versions');
 ok(compareVersions('1.6.1', '1.6.10') < 0, 'numeric, not lexical');
@@ -55,5 +55,10 @@ const rss = parseRss(`<rss><channel><item><title>Campagne &amp; malware</title><
 equal(rss.length, 1, 'rss limit');
 equal(rss[0].title, 'Campagne & malware', 'entities decoded');
 ok(rss[0].time > 1.7e9, 'rss date parsed');
+
+const codes = Object.keys(METEOALARM_COUNTRIES);
+ok(codes.every(c => /^[A-Z]{2}$/.test(c)), 'country codes are ISO alpha-2');
+equal(new Set(Object.values(METEOALARM_COUNTRIES)).size, codes.length, 'feed names are unique');
+ok(codes.includes('IT') && codes.includes('NO') && codes.includes('IL'), 'old and new countries present');
 
 done('parsers');

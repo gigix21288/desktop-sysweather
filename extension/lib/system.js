@@ -205,29 +205,36 @@ export class SystemMonitor {
      * plus the rate of each one, so the widget can show the interface that
      * carries the primary connection on a machine with several NICs.
      *
-     * @returns {{rx: number, tx: number, ifaces: Object<string, {rx: number, tx: number}>}}
+     * @returns {{rx: number, tx: number, ifaces: Object<string, {rx: number, tx: number}>,
+     *   all: Object<string, {rx: number, tx: number, physical: boolean}>}}
+     *   rx/tx and ifaces cover the physical interfaces (a VPN over Wi-Fi would
+     *   count twice); all lists every interface but the loopback that has
+     *   carried traffic, tunnels and bridges included, for the hover panel
      */
     _network(netdev, now) {
         const counters = new Map();
         for (const line of (netdev ?? '').split('\n').slice(2)) {
             const [iface, data] = line.split(':');
             const name = iface?.trim();
-            if (!data || !isPhysicalIface(name))
+            if (!data || !name || name === 'lo')
                 continue;
             const cols = data.trim().split(/\s+/).map(Number);
-            counters.set(name, {rx: cols[0], tx: cols[8]});
+            counters.set(name, {rx: cols[0], tx: cols[8], physical: isPhysicalIface(name)});
         }
         const prev = this._prevNet;
         this._prevNet = {counters, now};
-        const result = {rx: 0, tx: 0, ifaces: {}};
+        const result = {rx: 0, tx: 0, ifaces: {}, all: {}};
         if (!prev || now <= prev.now)
             return result;
         const seconds = (now - prev.now) / 1e6;
         for (const [name, c] of counters) {
             const p = prev.counters.get(name);
-            if (!p)
+            if (!p || c.rx + c.tx === 0)
                 continue;
             const rate = {rx: Math.max(0, (c.rx - p.rx) / seconds), tx: Math.max(0, (c.tx - p.tx) / seconds)};
+            result.all[name] = {...rate, physical: c.physical};
+            if (!c.physical)
+                continue;
             result.ifaces[name] = rate;
             result.rx += rate.rx;
             result.tx += rate.tx;
